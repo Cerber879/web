@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/style/style1.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora&family=Oxygen&display=swap" rel="stylesheet">
+    <title>Document</title>
+</head>
+
+<body>
+    {{ range .Header }}
+        <header class="header">
+            <img class="head_img" src="{{ .BackroundHeader }}" alt="head">
+            {{ range .HeaderTitle }}
+                <div class="header__title">
+                    <img src="{{ .Escape }}" alt="Escape1" >
+                    {{ range .Nav }}
+                        <ul class="navigation" >
+                            <li><a class="navigation__link" href="#">{{ .First }}</a></li>
+                            <li><a class="navigation__link" href="#">{{ .Second }}</a></li>
+                            <li><a class="navigation__link" href="#">{{ .Third }}</a></li>
+                            <li><a class="navigation__link" href="#">{{ .Fourth }}</a></li>
+                        </ul> 
+                    {{ end }}
+                </div> 
+            {{ end }} 
+        </header>
+    {{ end }}
+
+    {{ range .PostsHeader }}
+        <div class="header__turtual">
+            <h1 class="header__turtual_head" >{{ .Title }}</h1>
+            <p class="header__turtual_text" >{{ .Subtitle }}</p>
+            <button class="header__turtual_button" type="button">{{ .Button }}</button>
+        </div>
+    {{ end }}
+
+    {{ range .Menu }}
+        <div class="navigation-menu">
+            <img class="rect_img" src="{{ .BackroundMenu }}" alt="Rect">
+            {{ range .MenuTitle }}
+                <ul class="menu-items header__title">
+                    <li><a class="menu-items__link" href="#">{{ .First }}</a></li>
+                    <li><a class="menu-items__link" href="#">{{ .Second }}</a></li>
+                    <li><a class="menu-items__link" href="#">{{ .Third }}</a></li>
+                    <li><a class="menu-items__link" href="#">{{ .Fourth }}</a></li>
+                    <li><a class="menu-items__link" href="#">{{ .Fiveth }}</a></li>
+                    <li><a class="menu-items__link" href="#">{{ .Sixth }}</a></li>
+                </ul>  
+            {{ end }}  
+        </div>
+    {{ end }}
+
+    <article class="feature">
+        <h2 class="feature_head">{{ .FeaturedPostsTitle }}</h2>
+            <div class="feature__most">
+                {{ range .FeaturedPosts }}
+                    <div class="feature__road">
+                        <img class="first_img" src="{{ .Imageurl }}" alt="first">
+                        <div class="feature__road_header">
+                            <a class="feature__header_title" href = "{{ .PostURL }}">{{ .Title }}</a> 
+                            <p class="feature__header_text">{{ .Subtitle }}</p>
+                        </div>
+                        <div class="feature__info">
+                            <div class="feature__info__author">
+                                <img class="feature__info_img" src="{{ .Authorurl }}" alt="mat">
+                                <span class="feature__info_name">{{ .Author }}</span>                                 
+                            </div> 
+                            <span class="feature__info_data">{{ .Publishdate }}</span>                  
+                        </div>            
+                    </div>
+                {{ end }}
+            </div>
+    </article>
+
+    <article class="recent">
+        <h2 class="recent_title">{{ .MostRecentTitle }}</h2> 
+            <div class="recent-body">
+                {{ range .MostRecent }}
+                    <div class="recent-body__item"> 
+                        <img src="{{ .Imageurl }}" alt="still">
+                        <a class="most-recent__title-and-description" href="{{ .PostURL }}">
+                            <p class="recent-body__title">{{ .Title }}</p> 
+                            <span class="recent-body__text">{{ .Subtitle }}</span>
+                        </a>   
+                        <div class="recent-body__info">
+                            <img src="{{ .Authorurl }}" alt="wili">
+                            <span class="recent-body_name">{{ .Author }}</span>
+                            <span class="recent-body_date recent-body_name">{{ .Publishdate }}</span>
+                        </div>
+                    </div>
+                {{ end }}
+            </div>
+    </article>
+
+    {{ range .Footer }}
+        <footer class="footer">
+            <img class="footer_img" src="{{ .Background }}" alt="footer">
+            <div class="footer_1">
+                <p class="footer_head">{{ .Title}}</p>
+                <div class="search-form">
+                    <input placeholder="Enter your email address" class="search-form__txt" type="text">
+                    <button class="search-form__btn" type="button">{{ .Button}}</button>
+                </div>
+            </div>
+            <img class="Rectangl_img" src="{{ .Rectangl }}" alt="Rectangl">
+            {{ range .Bottom }}
+                <div class="footer_2 header__title">
+                    <img class="escape_img" src="{{ .Escape }}" alt="Escape" >
+                    {{ range .Nav }}
+                        <ul class="navigation">
+                            <li><a class="navigation__link" href="#">{{ .First }}</a></li>
+                            <li><a class="navigation__link" href="#">{{ .Second }}</a></li>
+                            <li><a class="navigation__link" href="#">{{ .Third }}</a></li>
+                            <li><a class="navigation__link" href="#">{{ .Fourth }}</a></li>
+                        </ul>
+                    {{ end }}
+                </div>
+            {{ end }}
+        </footer>
+    {{ end }}
+
+</body>
+</html>

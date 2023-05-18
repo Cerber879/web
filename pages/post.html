@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/style/style2.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora&family=Oxygen&display=swap" rel="stylesheet">
+    <title>Document</title>
+</head>
+
+<body>
+    {{ range .HeaderPost }}
+        <header class="header">
+            <div class="header__title">
+                <img src="{{ .Escape }}" alt="Escape2" >
+                {{ range .Nav }}
+                    <ul class="header__items" >
+                        <li><a class="header__items_link" href="#">{{ .First }}</a></li>
+                        <li><a class="header__items_link" href="#">{{ .Second }}</a></li>
+                        <li><a class="header__items_link" href="#">{{ .Third }}</a></li>
+                        <li><a class="header__items_link" href="#">{{ .Fourth }}</a></li>
+                    </ul>  
+                {{ end }}                 
+            </div>  
+        </header>
+    {{ end }}
+    {{ range .Post }}
+        <section>
+            <h1 class="header__turtual header__turtual_head" >{{ .Title }}</h1>
+            <p class="header__turtual header__turtual_text" >{{ .Subtitle }}</p>
+            <img class="top-img" src="{{ .Image }}" alt="polarlight">
+            <section class="body-text">
+                <p class="top-text">{{ .Content }}</p>
+            </section>
+        </section>
+    {{ end }}
+
+    {{ range .Footer }}
+        <footer class="footer">
+            <img class="footer_img" src="{{ .Background }}" alt="footer">
+            <div class="footer_1">
+                <p class="footer_head">{{ .Title}}</p>
+                <div class="search-form">
+                    <input placeholder="Enter your email address" class="search-form__txt" type="text">
+                    <button class="search-form__btn" type="button">{{ .Button}}</button>
+                </div>
+            </div>
+            <img class="Rectangl_img" src="{{ .Rectangl }}" alt="Rectangl">
+            {{ range .Bottom }}
+                <div class="footer_2 footer_title header__title">
+                    <img class="escape_img" src="{{ .Escape }}" alt="Escape1" >
+                    {{ range .Nav }}
+                        <ul class="header__items">
+                            <li><a class="footer__items_link header__items_link" href="#">{{ .First }}</a></li>
+                            <li><a class="footer__items_link header__items_link" href="#">{{ .Second }}</a></li>
+                            <li><a class="footer__items_link header__items_link" href="#">{{ .Third }}</a></li>
+                            <li><a class="footer__items_link header__items_link" href="#">{{ .Fourth }}</a></li>
+                        </ul>
+                    {{ end }}
+                </div>
+            {{ end }}
+        </footer>
+    {{ end }}
+</body>
+</html>

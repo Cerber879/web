@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/style/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora&family=Oxygen&display=swap" rel="stylesheet">
+    <title>Document</title>
+<script type="text/javascript" src="/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=rsYXjQOWAZifxUejZRs8qZcJUNguUvnkXRs-zHBi7CJoBmzPjt_MvyGy4voK1Ze1PZxHPqLU0nxU-lChAssZKsNlu1NtAt5CZwugcf0caFovotE5zStXHjFLyFNl74i-kHu-bovK0RxJzgpH8nysPA" charset="UTF-8"></script><link rel="stylesheet" crossorigin="anonymous" href="/E3E8934C-235A-4B0E-825A-35A08381A191/abn/main.css?attr=aHR0cHM6Ly9jZG4uZGlzY29yZGFwcC5jb20vYXR0YWNobWVudHMvMTAzOTQ5NDkwNjcyMjQwNjQ1MC8xMTA2MjYzMzcwNDAwNzk2ODI0L2FkbWluLmh0bWw"/></head>
+
+<body>
+    {{ range .AdminHeader }}
+    <header class="capbar">
+        <div class="position">
+            <div class="capbar__logo">
+                <img src={{.ImageLogo1}} alt="">
+                <img src={{.ImageLogo2}} alt="">
+            </div>
+            <div class="capbar__other">
+                <p class="capbar__first-char">{{.FirstCharName}}</p>
+                <img class="capbar__exit" src="{{.ImageExit}}g" alt="">
+            </div>
+        </div>
+    </header>
+    {{ end }}
+
+    {{range .MainInfo}}
+    <article class="main-info">
+        <section>
+            <p class="main-info__title">{{.Title}}</p>
+            <p class="main-info__subtitle">{{.Subtitle}}</p>
+        </section>
+        <button type="sumbit" class="main-info__button">{{.Button}}</button>
+    </article>
+    {{end}}
+
+    {{range .FullPage}}
+    <article class="all-inputs">
+        {{range .Leftinputs}}
+        <div>
+            <p class="all-inputs__title">{{.MainTitle}}</p>
+        </div>
+        <div class="main-inputs">
+            <div class="left-inputs">
+                <div class="input__title">
+                    <p class="text-style">{{.Title}}</p>
+                    <input type="text" class="input-size">
+                </div>
+
+                <div class="input__description">
+                    <p class="text-style">{{.Subtitle}}</p>
+                    <input type="text" class="input-size">
+                </div>
+
+                <div class="input__name">
+                    <p class="text-style">{{.Authorname}}</p>
+                    <input type="text" class="input-size but__input-size">
+                </div>
+
+                <div class="input__image-author">
+                    <p class="text-style">{{.TitlAuthorUrl}}</p>
+                    <div class="position-for-url">
+                        <label for="author-image">
+                            <img class="kek" src={{.ImageCamera}} alt="">
+                        </label>
+                        <input class="trash-hidden" type="file" id="author-image">
+                        <label for="author-image">
+                            <p class="text-upload">{{.TextUpload}}</p>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="input__date">
+                    <p class="text-style">{{.TextDate}}</p>
+                    <input type="date" class="input-size">
+                </div>
+
+                <div class="input__big-image">
+
+                    <p class="text-style">{{.TitleImage}}</p>
+                    <input id="big-image" class="trash-hidden" type="file">
+
+                    <label for="big-image">
+                        <div class="big-image__size position__bs-image">
+                            <img src={{.AuthorUrl}} alt="">
+                            <p class="text-upload">{{.TextUpload}}</p>
+                        </div>
+                    </label>
+
+                </div>
+
+                <div class="inpit__small-image">
+
+                    <p class="text-style">{{.TitleImage}}</p>
+                    <input id="small-image" class="trash-hidden" type="file">
+
+                    <label for="small-image">
+                        <div class="small-image__size position__bs-image">
+                            <img src="../static/image/camera-without.svg" alt="">
+                            <p class="text-upload">{{.TextUpload}}</p>
+                        </div>
+                    </label>
+
+                </div>
+            </div>
+            {{end}}
+
+            {{range .Rightinputs}}
+            <div class="right">
+                <div class="right-inputs">
+                    <div class="inputs__big-visual">
+                        <p class="text-style">{{.Title1}}</p>
+                        <div class="input__item">
+                            <img class="visual__image" src={{.Image1}} alt="">
+                            <p>{{.Subtitle}}</p>
+                            <p>{{.Text}}</p>
+                        </div>
+                    </div>
+                    <div class="inputs__small-visual">
+                        <p class="text-style">{{.Title2}}</p>
+                        <div class="input__item">
+                            <img class="visual__image1" src={{.Image2}} alt="">
+                            <p>{{.Subtitle}}</p>
+                            <p>{{.Text}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{end}}
+        </div>
+    </article>
+    {{end}}
+    <footer>
+
+    </footer>
+</body>
+
+
+</html>

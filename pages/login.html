@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Страница авторизации</title>
+        <link href="https://fonts.googleapis.com/css2?family=Oxygen:wght@300&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
+        <link href="static/style/login.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+            {{ range .Header }}
+                <header class="header">
+                    <img class="header__logo" src="{{ .Logo }}" alt="Logo">
+                    <p class="header__title">{{ .Title }}</p>
+                </header>
+            {{ end }}
+            {{ range .Main }}
+                <section class="main">
+                    <h1 class="main__title">{{ .Title }}</h1>
+                    <form class="main__form">
+                        <div class="main__email">
+                            <p class="main__comment">{{ .Email }}</p>
+                            <input class="main__field" type="email">
+                        </div>
+                        <div class="main__pass">
+                            <p class="main__comment">{{ .Pass }}</p>
+                            <input class="main__field" type="password">
+                        </div>
+                        <button class="main__button">{{ .Button }}</button>
+                    </form>
+                </section>
+            {{ end }}
+        </div>
+    </body>
+</html>

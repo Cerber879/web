@@ -28,14 +28,14 @@
         </header>
     {{ end }}
     {{ range .Post }}
-        <section>
+        <div>
             <h1 class="header__turtual header__turtual_head" >{{ .Title }}</h1>
             <p class="header__turtual header__turtual_text" >{{ .Subtitle }}</p>
             <img class="top-img" src="{{ .Image }}" alt="polarlight">
-            <section class="body-text">
+            <div class="body-text">
                 <p class="top-text">{{ .Content }}</p>
-            </section>
-        </section>
+            </div>
+        </div>
     {{ end }}
 
     {{ range .Footer }}

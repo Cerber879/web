@@ -2,15 +2,13 @@ package main
 
 import (
 	"database/sql"
-	_ "database/sql"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"strconv"
-	_ "strconv"
 
 	"github.com/gorilla/mux"
-	_ "github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -88,6 +86,7 @@ type menutitledata struct {
 }
 
 type featuredPosts struct {
+	PostID      string `db:"post_id"`
 	Title       string `db:"title"`
 	Subtitle    string `db:"subtitle"`
 	Author      string `db:"author"`
@@ -98,6 +97,7 @@ type featuredPosts struct {
 }
 
 type mostRecent struct {
+	PostID      string `db:"post_id"`
 	Title       string `db:"title"`
 	Subtitle    string `db:"subtitle"`
 	Author      string `db:"author"`
@@ -412,6 +412,7 @@ func menutitle() []menutitledata {
 func featuredposts(db *sqlx.DB) ([]featuredPosts, error) {
 	const query = `
 		SELECT
+		  post_id,
 		  title,
 		  subtitle,
 		  author,
@@ -429,12 +430,19 @@ func featuredposts(db *sqlx.DB) ([]featuredPosts, error) {
 		return nil, err
 	}
 
+	for _, post := range featuredPosts {
+		post.PostURL = "/post/" + post.PostID
+	}
+
+	fmt.Println(featuredPosts)
+
 	return featuredPosts, nil
 }
 
 func mostrecent(db *sqlx.DB) ([]mostRecent, error) {
 	const query = `
 		SELECT
+		  post_id,
 		  title,
 		  subtitle,
 		  author,
@@ -451,6 +459,12 @@ func mostrecent(db *sqlx.DB) ([]mostRecent, error) {
 	if err != nil {                      // Проверяем, что запрос в базу данных не завершился с ошибкой
 		return nil, err
 	}
+
+	for _, post := range mostrecent {
+		post.PostURL = "/post/" + post.PostID
+	}
+
+	fmt.Println(mostrecent)
 
 	return mostrecent, nil
 

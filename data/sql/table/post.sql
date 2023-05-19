@@ -1,4 +1,4 @@
-CREATE TABLE post
+CREATE TABLE `post`
 (
    `post_id`      INT NOT NULL AUTO_INCREMENT,
    `title`        VARCHAR(255) NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE post
    `image_url`    VARCHAR(255) NOT NULL,
    `content`      TEXT NOT NULL,
    `featured`     TINYINT(1) DEFAULT 0,
-   PRIMARY KEY (post_id)
+   PRIMARY KEY (`post_id`)
 ) ENGINE = InnoDB
 CHARACTER SET = utf8mb4
 COLLATE utf8mb4_unicode_ci

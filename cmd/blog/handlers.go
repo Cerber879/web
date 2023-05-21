@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -16,9 +17,9 @@ type indexPage struct {
 	PostsHeader        []postsheaderdata
 	Menu               []menudata
 	FeaturedPostsTitle string
-	FeaturedPosts      []featuredPosts
+	FeaturedPosts      []*featuredPosts
 	MostRecentTitle    string
-	MostRecent         []mostRecent
+	MostRecent         []*mostRecent
 	Footer             []footerdata
 }
 
@@ -92,6 +93,7 @@ type featuredPosts struct {
 	Authorurl   string `db:"author_url"`
 	Publishdate string `db:"publish_date"`
 	Imageurl    string `db:"image_url"`
+	PostURL     string
 }
 
 type mostRecent struct {
@@ -102,6 +104,7 @@ type mostRecent struct {
 	Authorurl   string `db:"author_url"`
 	Publishdate string `db:"publish_date"`
 	Imageurl    string `db:"image_url"`
+	PostURL     string
 }
 
 type footerdata struct {
@@ -232,7 +235,7 @@ func post(db *sqlx.DB) func(w http.ResponseWriter, r *http.Request) {
 
 		postID, err := strconv.Atoi(postIDStr)
 		if err != nil {
-			http.Error(w, "Invalid order id", 403)
+			http.Error(w, "Invalid post id", 403)
 			log.Println(err)
 			return
 		}
@@ -346,18 +349,20 @@ func headerpost() []headerpostdata {
 func postByID(db *sqlx.DB, postID int) ([]postdata, error) {
 	const query = `
 		SELECT
-		  title,
-		  subtitle,
-		  image_url,
-		  content
+		    title,
+		    subtitle,
+		    image_url,
+		    content
 		FROM
-		  post
-	    WHERE
-		  post_id = ?
+			post
+		WHERE
+			post_id = ?
 	`
+	// В SQL-запросе добавились параметры, как в шаблоне. ? означает параметр, который мы передаем в запрос ниже
 
 	var post []postdata
 
+	// Обязательно нужно передать в параметрах orderID
 	err := db.Select(&post, query, postID)
 	if err != nil {
 		return nil, err
@@ -409,7 +414,7 @@ func menutitle() []menutitledata {
 	}
 }
 
-func featuredposts(db *sqlx.DB) ([]featuredPosts, error) {
+func featuredposts(db *sqlx.DB) ([]*featuredPosts, error) {
 	const query = `
 		SELECT
 		  post_id,
@@ -423,17 +428,23 @@ func featuredposts(db *sqlx.DB) ([]featuredPosts, error) {
 		  post
 		WHERE featured = 1
 	` // Составляем SQL-запрос для получения записей для секции featured-posts
-	var featuredPosts []featuredPosts // Заранее объявляем массив с результирующей информацией
+	var featuredPosts []*featuredPosts // Заранее объявляем массив с результирующей информацией
 
 	err := db.Select(&featuredPosts, query) // Делаем запрос в базу данных
 	if err != nil {                         // Проверяем, что запрос в базу данных не завершился с ошибкой
 		return nil, err
 	}
 
+	for _, post := range featuredPosts {
+		post.PostURL = "/post/" + post.PostID
+	}
+
+	fmt.Println(featuredPosts)
+
 	return featuredPosts, nil
 }
 
-func mostrecent(db *sqlx.DB) ([]mostRecent, error) {
+func mostrecent(db *sqlx.DB) ([]*mostRecent, error) {
 	const query = `
 		SELECT
 		  post_id,
@@ -447,12 +458,18 @@ func mostrecent(db *sqlx.DB) ([]mostRecent, error) {
 		  post
 		WHERE featured = 0
 	` // Составляем SQL-запрос для получения записей для секции most-posts
-	var mostrecent []mostRecent // Заранее объявляем массив с результирующей информацией
+	var mostrecent []*mostRecent // Заранее объявляем массив с результирующей информацией
 
 	err := db.Select(&mostrecent, query) // Делаем запрос в базу данных
 	if err != nil {                      // Проверяем, что запрос в базу данных не завершился с ошибкой
 		return nil, err
 	}
+
+	for _, post := range mostrecent {
+		post.PostURL = "/post/" + post.PostID
+	}
+
+	fmt.Println(mostrecent)
 
 	return mostrecent, nil
 

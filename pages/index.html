@@ -62,7 +62,7 @@
                     <div class="feature__road">
                         <img class="first_img" src="{{ .Imageurl }}" alt="first">
                         <div class="feature__road_header">
-                            <a class="feature__header_title" href = "/post/{{ .PostID }}">{{ .Title }}</a> 
+                            <a class="feature__header_title" href = "{{ .PostURL }}">{{ .Title }}</a> 
                             <p class="feature__header_text">{{ .Subtitle }}</p>
                         </div>
                         <div class="feature__info">
@@ -83,7 +83,7 @@
                 {{ range .MostRecent }}
                     <div class="recent-body__item"> 
                         <img src="{{ .Imageurl }}" alt="still">
-                        <a class="most-recent__title-and-description" href="/post/{{ .PostID }}">
+                        <a class="most-recent__title-and-description" href="{{ .PostURL }}">
                             <p class="recent-body__title">{{ .Title }}</p> 
                             <span class="recent-body__text">{{ .Subtitle }}</span>
                         </a>   

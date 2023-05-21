@@ -12,22 +12,21 @@
 <script type="text/javascript" src="/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=rsYXjQOWAZifxUejZRs8qZcJUNguUvnkXRs-zHBi7CJoBmzPjt_MvyGy4voK1Ze1PZxHPqLU0nxU-lChAssZKsNlu1NtAt5CZwugcf0caFovotE5zStXHjFLyFNl74i-kHu-bovK0RxJzgpH8nysPA" charset="UTF-8"></script><link rel="stylesheet" crossorigin="anonymous" href="/E3E8934C-235A-4B0E-825A-35A08381A191/abn/main.css?attr=aHR0cHM6Ly9jZG4uZGlzY29yZGFwcC5jb20vYXR0YWNobWVudHMvMTAzOTQ5NDkwNjcyMjQwNjQ1MC8xMTA2MjYzMzcwNDAwNzk2ODI0L2FkbWluLmh0bWw"/></head>
 
 <body>
-    {{ range .AdminHeader }}
+    {{ range .Header }}
     <header class="capbar">
         <div class="position">
             <div class="capbar__logo">
-                <img src={{.ImageLogo1}} alt="">
-                <img src={{.ImageLogo2}} alt="">
+                <img src="{{ .Logo }}" alt="">
             </div>
             <div class="capbar__other">
-                <p class="capbar__first-char">{{.FirstCharName}}</p>
+                <p class="capbar__first-char">{{.Avatar}}</p>
                 <img class="capbar__exit" src="{{.ImageExit}}g" alt="">
             </div>
         </div>
     </header>
     {{ end }}
 
-    {{range .MainInfo}}
+    {{range .MainTop}}
     <article class="main-info">
         <section>
             <p class="main-info__title">{{.Title}}</p>
@@ -37,12 +36,12 @@
     </article>
     {{end}}
 
-    {{range .FullPage}}
+    {{range .MainInfo}}
     <article class="all-inputs">
-        {{range .Leftinputs}}
         <div>
-            <p class="all-inputs__title">{{.MainTitle}}</p>
+            <p class="all-inputs__title">{{.Title}}</p>
         </div>
+        {{range .Fields}}
         <div class="main-inputs">
             <div class="left-inputs">
                 <div class="input__title">
@@ -51,12 +50,12 @@
                 </div>
 
                 <div class="input__description">
-                    <p class="text-style">{{.Subtitle}}</p>
+                    <p class="text-style">{{.Description}}</p>
                     <input type="text" class="input-size">
                 </div>
 
                 <div class="input__name">
-                    <p class="text-style">{{.Authorname}}</p>
+                    <p class="text-style">{{.AuthorName}}</p>
                     <input type="text" class="input-size but__input-size">
                 </div>
 
@@ -64,17 +63,17 @@
                     <p class="text-style">{{.TitlAuthorUrl}}</p>
                     <div class="position-for-url">
                         <label for="author-image">
-                            <img class="kek" src={{.ImageCamera}} alt="">
+                            <img class="kek" src={{.AuthorPhoto}} alt="">
                         </label>
                         <input class="trash-hidden" type="file" id="author-image">
                         <label for="author-image">
-                            <p class="text-upload">{{.TextUpload}}</p>
+                            <p class="text-upload">{{.Upload}}</p>
                         </label>
                     </div>
                 </div>
 
                 <div class="input__date">
-                    <p class="text-style">{{.TextDate}}</p>
+                    <p class="text-style">{{.Date}}</p>
                     <input type="date" class="input-size">
                 </div>
 
@@ -85,8 +84,8 @@
 
                     <label for="big-image">
                         <div class="big-image__size position__bs-image">
-                            <img src={{.AuthorUrl}} alt="">
-                            <p class="text-upload">{{.TextUpload}}</p>
+                            <img src={{.BigImageURL}} alt="">
+                            <p class="text-upload">{{.SmallImageURL}}</p>
                         </div>
                     </label>
 
@@ -99,8 +98,8 @@
 
                     <label for="small-image">
                         <div class="small-image__size position__bs-image">
-                            <img src="../static/image/camera-without.svg" alt="">
-                            <p class="text-upload">{{.TextUpload}}</p>
+                            <img src="{{.BigNote}}" alt="">
+                            <p class="text-upload">{{.SmallNote}}</p>
                         </div>
                     </label>
 
@@ -108,7 +107,7 @@
             </div>
             {{end}}
 
-            {{range .Rightinputs}}
+            {{range .Preview}}
             <div class="right">
                 <div class="right-inputs">
                     <div class="inputs__big-visual">

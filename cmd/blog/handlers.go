@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -93,7 +92,6 @@ type featuredPosts struct {
 	Authorurl   string `db:"author_url"`
 	Publishdate string `db:"publish_date"`
 	Imageurl    string `db:"image_url"`
-	PostURL     string
 }
 
 type mostRecent struct {
@@ -104,7 +102,6 @@ type mostRecent struct {
 	Authorurl   string `db:"author_url"`
 	Publishdate string `db:"publish_date"`
 	Imageurl    string `db:"image_url"`
-	PostURL     string
 }
 
 type footerdata struct {
@@ -116,8 +113,9 @@ type footerdata struct {
 }
 
 type loginpage struct {
-	Header []headerlogindata
-	Main   []mainlogindata
+	Background string
+	Header     []headerlogindata
+	Main       []mainlogindata
 }
 
 type headerlogindata struct {
@@ -136,7 +134,6 @@ type adminpage struct {
 	Header   []headeradmindata
 	MainTop  []maintopdata
 	MainInfo []maininfodata
-	Content  []contentdata
 }
 
 type headeradmindata struct {
@@ -158,47 +155,27 @@ type maininfodata struct {
 }
 
 type fieldsdata struct {
-	Title          string
-	Description    string
-	AuthorName     string
-	AuthorPhoto    string
-	AuthorPhotoURL string
-	Upload         string
-	Date           string
-	TitleImage     string
-	BigImageURL    string
-	SmallImageURL  string
-	BigNote        string
-	SmallNote      string
+	Title         string
+	Description   string
+	AuthorName    string
+	TitlAuthorUrl string
+	AuthorPhoto   string
+	Upload        string
+	Date          string
+	TitleImage    string
+	BigImageURL   string
+	SmallImageURL string
+	BigNote       string
+	SmallNote     string
 }
 
 type previewdata struct {
-	Article  []articledata
-	PostCard []postcarddata
-}
-
-type articledata struct {
-	Label    string
-	FrameURL string
-	Title    string
+	Title1   string
+	Image1   string
 	Subtitle string
-	Imageurl string
-}
-
-type postcarddata struct {
-	Label          string
-	FrameURL       string
-	Imageurl       string
-	Title          string
-	Subtitle       string
-	AuthorPhotoURL string
-	AuthorName     string
-	Data           string
-}
-
-type contentdata struct {
-	Title   string
-	Comment string
+	Text     string
+	Title2   string
+	Image2   string
 }
 
 type bottomdata struct {
@@ -263,7 +240,7 @@ func post(db *sqlx.DB) func(w http.ResponseWriter, r *http.Request) {
 		post, err := postByID(db, postID)
 		if err != nil {
 			if err == sql.ErrNoRows {
-				http.Error(w, "Order not found", 404)
+				http.Error(w, "Post not found", 404)
 				log.Println(err)
 				return
 			}
@@ -304,11 +281,34 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := loginpage{
-		Header: headerlogin(),
-		Main:   mainlogin(),
+		Background: "../static/images/login_background.png",
+		Header:     headerlogin(),
+		Main:       mainlogin(),
 	}
 
 	err = ts.Execute(w, data) // Заставляем шаблонизатор вывести шаблон в тело ответа
+	if err != nil {
+		http.Error(w, "Internal Server Error", 500)
+		log.Println(err.Error())
+		return
+	}
+}
+
+func admin(w http.ResponseWriter, r *http.Request) {
+	ts, err := template.ParseFiles("pages/admin.html")
+	if err != nil {
+		http.Error(w, "Internal Server Error", 500)
+		log.Println(err.Error())
+		return
+	}
+
+	data := adminpage{
+		Header:   headeradmin(),
+		MainTop:  maintop(),
+		MainInfo: maininfo(),
+	}
+
+	err = ts.Execute(w, data)
 	if err != nil {
 		http.Error(w, "Internal Server Error", 500)
 		log.Println(err.Error())
@@ -430,12 +430,6 @@ func featuredposts(db *sqlx.DB) ([]featuredPosts, error) {
 		return nil, err
 	}
 
-	for _, post := range featuredPosts {
-		post.PostURL = "/post/" + post.PostID
-	}
-
-	fmt.Println(featuredPosts)
-
 	return featuredPosts, nil
 }
 
@@ -459,12 +453,6 @@ func mostrecent(db *sqlx.DB) ([]mostRecent, error) {
 	if err != nil {                      // Проверяем, что запрос в базу данных не завершился с ошибкой
 		return nil, err
 	}
-
-	for _, post := range mostrecent {
-		post.PostURL = "/post/" + post.PostID
-	}
-
-	fmt.Println(mostrecent)
 
 	return mostrecent, nil
 
@@ -494,7 +482,7 @@ func bottom() []bottomdata {
 func headerlogin() []headerlogindata {
 	return []headerlogindata{
 		{
-			Logo:  "../static/svg_files/Logo Inversed.svg",
+			Logo:  "../static/images/Logo Inversed.svg",
 			Title: "Log in to start creating",
 		},
 	}
@@ -507,6 +495,68 @@ func mainlogin() []mainlogindata {
 			Email:  "Email",
 			Pass:   "Password",
 			Button: "Log In",
+		},
+	}
+}
+
+func headeradmin() []headeradmindata {
+	return []headeradmindata{
+		{
+			Logo:      "../static/svg_files/escape_author_white.svg",
+			Avatar:    "../static/images/avatar.png",
+			ImageExit: "/login",
+		},
+	}
+}
+
+func maintop() []maintopdata {
+	return []maintopdata{
+		{
+			Title:    "New Post",
+			Subtitle: "Fill out the form bellow and publish your article",
+			Button:   "Publish",
+		},
+	}
+}
+
+func maininfo() []maininfodata {
+	return []maininfodata{
+		{
+			Title:   "Main Information",
+			Fields:  fields(),
+			Preview: preview(),
+		},
+	}
+}
+
+func fields() []fieldsdata {
+	return []fieldsdata{
+		{
+			Title:         "Title",
+			Description:   "Short description",
+			AuthorName:    "Author Name",
+			TitlAuthorUrl: "Author Photo",
+			AuthorPhoto:   "../static/svg_files/photo_icon.svg",
+			Upload:        "Upload",
+			Date:          "Publish Date",
+			TitleImage:    "Hero image",
+			BigImageURL:   "../static/images/hero_image_big.png",
+			SmallImageURL: "../static/images/hero_image_small.png",
+			BigNote:       "Size up to 10mb. Format: png, jpeg, gif.",
+			SmallNote:     "Size up to 5mb. Format: png, jpeg, gif.",
+		},
+	}
+}
+
+func preview() []previewdata {
+	return []previewdata{
+		{
+			Title1:   "New Post",
+			Image1:   "../static/images/aritcle_frame.png",
+			Subtitle: "New Post",
+			Text:     "Please, enter any description",
+			Title2:   "New Post",
+			Image2:   "../static/images/aritcle_frame.png",
 		},
 	}
 }

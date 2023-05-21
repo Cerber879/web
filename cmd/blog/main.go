@@ -27,6 +27,7 @@ func main() {
 	mux.HandleFunc("/home", index(dbx))
 	mux.HandleFunc("/post/{postID}", post(dbx))
 	mux.HandleFunc("/login", login)
+	mux.HandleFunc("/admin", admin)
 	// Реализуем отдачу статики
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 

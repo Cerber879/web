@@ -1,4 +1,4 @@
-INSERT INTO `post` (
+INSERT INTO post (
   title,
   subtitle,
   author,

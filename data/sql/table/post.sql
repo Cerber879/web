@@ -1,4 +1,4 @@
-CREATE TABLE `post`
+CREATE TABLE post
 (
    `post_id`      INT NOT NULL AUTO_INCREMENT,
    `title`        VARCHAR(255) NOT NULL,

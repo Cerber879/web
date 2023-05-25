@@ -8,9 +8,8 @@
     <link rel="stylesheet" href="../static/style/admin.css">
     <link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lora&family=Oxygen&display=swap" rel="stylesheet">
+    <script src="../static/js/admin.js"></script>
     <title>Document</title>
-<script type="text/javascript" src="/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=rsYXjQOWAZifxUejZRs8qZcJUNguUvnkXRs-zHBi7CJoBmzPjt_MvyGy4voK1Ze1PZxHPqLU0nxU-lChAssZKsNlu1NtAt5CZwugcf0caFovotE5zStXHjFLyFNl74i-kHu-bovK0RxJzgpH8nysPA" charset="UTF-8"></script><link rel="stylesheet" crossorigin="anonymous" href="/E3E8934C-235A-4B0E-825A-35A08381A191/abn/main.css?attr=aHR0cHM6Ly9jZG4uZGlzY29yZGFwcC5jb20vYXR0YWNobWVudHMvMTAzOTQ5NDkwNjcyMjQwNjQ1MC8xMTA2MjYzMzcwNDAwNzk2ODI0L2FkbWluLmh0bWw"/></head>
-
 <body>
     {{ range .Header }}
     <header class="capbar">
@@ -18,9 +17,11 @@
             <div class="capbar__logo">
                 <img src="{{ .Logo }}" alt="">
             </div>
-            <div class="capbar__other">
-                <p class="capbar__first-char">{{.Avatar}}</p>
-                <img class="capbar__exit" src="{{.ImageExit}}g" alt="">
+            <div class="header__avatar-and-exit">
+                <img class="header__avatar" src="{{.Avatar}}">
+                <a href="{{.ImageExit}}">
+                    <img class="header__exit" src="{{.Exit}}" alt="">
+                </a>      
             </div>
         </div>
     </header>
@@ -32,7 +33,7 @@
             <p class="main-info__title">{{.Title}}</p>
             <p class="main-info__subtitle">{{.Subtitle}}</p>
         </section>
-        <button type="sumbit" class="main-info__button">{{.Button}}</button>
+        <button type="sumbit" class="main-info__button" onclick="Click()">{{.Button}}</button>
     </article>
     {{end}}
 
@@ -46,27 +47,24 @@
             <div class="left-inputs">
                 <div class="input__title">
                     <p class="text-style">{{.Title}}</p>
-                    <input type="text" class="input-size">
+                    <input id="Title" type="text" class="input-size" placeholder="New post" >
                 </div>
 
                 <div class="input__description">
-                    <p class="text-style">{{.Description}}</p>
-                    <input type="text" class="input-size">
+                    <p class="text-style">{{.SubTitle}}</p>
+                    <input id="Subtitle" type="text" class="input-size">
                 </div>
 
                 <div class="input__name">
                     <p class="text-style">{{.AuthorName}}</p>
-                    <input type="text" class="input-size but__input-size">
+                    <input id="Author-name" type="text" class="input-size but__input-size">
                 </div>
 
                 <div class="input__image-author">
                     <p class="text-style">{{.TitlAuthorUrl}}</p>
                     <div class="position-for-url">
-                        <label for="author-image">
+                        <label id="author-icon" for="author-image">
                             <img class="kek" src={{.AuthorPhoto}} alt="">
-                        </label>
-                        <input class="trash-hidden" type="file" id="author-image">
-                        <label for="author-image">
                             <p class="text-upload">{{.Upload}}</p>
                         </label>
                     </div>
@@ -84,11 +82,10 @@
 
                     <label for="big-image">
                         <div class="big-image__size position__bs-image">
-                            <img src={{.BigImageURL}} alt="">
-                            <p class="text-upload">{{.SmallImageURL}}</p>
+                            <img src={{.HeroBigImage}} alt="">
                         </div>
                     </label>
-
+                    <p class="text-upload">{{.BigNote}}</p>
                 </div>
 
                 <div class="inpit__small-image">
@@ -98,44 +95,61 @@
 
                     <label for="small-image">
                         <div class="small-image__size position__bs-image">
-                            <img src="{{.BigNote}}" alt="">
-                            <p class="text-upload">{{.SmallNote}}</p>
+                            <img src="{{.HeroSmallImage}}" alt="">
                         </div>
                     </label>
-
+                    <p class="text-upload">{{.SmallNote}}</p>
                 </div>
             </div>
             {{end}}
 
-            {{range .Preview}}
-            <div class="right">
-                <div class="right-inputs">
-                    <div class="inputs__big-visual">
-                        <p class="text-style">{{.Title1}}</p>
-                        <div class="input__item">
-                            <img class="visual__image" src={{.Image1}} alt="">
-                            <p>{{.Subtitle}}</p>
-                            <p>{{.Text}}</p>
-                        </div>
+            {{ range .Preview}}
+                <div class="main-info__preview">
+                    {{ range .Article }}
+                    <p class="main-info__article-label">{{ .Label }}</p>
+                    <div class="main-info__article-preview"> 
+                        <img class="main-info__article-preview-frame" src="{{ .FrameURL }}" alt="article frame">
+                        <h2 id="preview-title-article" class="main-info__article-title z-top">{{ .Title }}</h2>
+                        <p id="preview-subtitle-article" class="main-info__article-description z-top">{{ .Subtitle }}</p>
+                        <img id="preview-big-image" class="main-info__article-image z-top" src="{{ .Imageurl }}" alt="Big Image">
+                        <div class="main-info__article-gradient z-top"></div>
                     </div>
-                    <div class="inputs__small-visual">
-                        <p class="text-style">{{.Title2}}</p>
-                        <div class="input__item">
-                            <img class="visual__image1" src={{.Image2}} alt="">
-                            <p>{{.Subtitle}}</p>
-                            <p>{{.Text}}</p>
+                    {{ end }}
+                    {{ range .PostCard }}
+                    <p class="main-info__post-card-label">{{ .Label }}</p>
+                    <div class="main-info__post-card-preview">
+                        <img class="main-info__post-card-preview-frame" src="{{ .FrameURL }}" alt="post card frame">
+                        <div class="main-info__post-card-preview-elements z-top">
+                            <img id="preview-small-image" class="main-info__post-card-image" src="{{ .Imageurl }}" alt="Small Image">
+                            <div class="main-info__border">
+                                <h2 id="preview-title" class="main-info__post-card-title">{{ .Title }}</h2>
+                                <p id="preview-subtitle" class="main-info__post-card-description">{{ .Subtitle }}</p>
+                            </div>
+                            <div class="main-info__post-info main-info__border">
+                                <img id="preview-author-photo" class="main-info__post-card-author-photo" src="{{ .AuthorPhotoURL }}" alt="author">
+                                <p id="preview-author-name" class="main-info__post-card-author-data">{{ .AuthorName }}</p>
+                                <p id="preview-data" class="main-info__post-card-author-data main-info_post-card-data">{{ .Data }}</p>
+                            </div>
                         </div>
+                        <div class="main-info__post-card-gradient-vertical z-top"></div>
+                        <div class="main-info__post-card-gradient-gorizontal z-top"></div>
                     </div>
+                    {{ end }}
                 </div>
-            </div>
-            {{end}}
+                
+            {{ end }}
         </div>
     </article>
     {{end}}
-    <footer>
+    {{ range .Content }}
+        <div class="content all-inputs">
+            <h2 class="content__title">{{ .Title }}</h2>
+            <div class="content__text-area">
+                <p class="content__comment">{{ .Comment }}</p>
+                <textarea id="content" class="content__field-for-content" placeholder="Type anything you want ..."  onchange="ChangeContent()"></textarea>
+            </div>
+        </div>
+    {{ end }}
 
-    </footer>
 </body>
-
-
 </html>

@@ -13,24 +13,31 @@
 
 <body>
     {{ range .HeaderPost }}
-        <header class="header">
+        <header class="header wrapper">
             <div class="header__title">
-                <img src="{{ .Escape }}" alt="Escape2" >
+                <img class="Escape2" src="{{ .Escape }}" alt="Escape2" >
                 {{ range .Nav }}
-                    <ul class="header__items" >
-                        <li><a class="header__items_link" href="#">{{ .First }}</a></li>
-                        <li><a class="header__items_link" href="#">{{ .Second }}</a></li>
-                        <li><a class="header__items_link" href="#">{{ .Third }}</a></li>
-                        <li><a class="header__items_link" href="#">{{ .Fourth }}</a></li>
+                    <div id="sidebar">
+                        <div class="toggle-btn" onclick="openMenu()">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <ul class="navigation" >
+                        <li class="navigation__link"><a class="navigation__link" href="#">{{ .First }}</a></li>
+                        <li class="navigation__link"><a class="navigation__link" href="#">{{ .Second }}</a></li>
+                        <li class="navigation__link"><a class="navigation__link" href="#">{{ .Third }}</a></li>
+                        <li class="navigation__link"><a class="navigation__link" href="#">{{ .Fourth }}</a></li>
                     </ul>  
+                    </div> 
                 {{ end }}                 
             </div>  
         </header>
     {{ end }}
     {{ range .Post }}
         <div>
-            <h1 class="header__turtual header__turtual_head" >{{ .Title }}</h1>
-            <p class="header__turtual header__turtual_text" >{{ .Subtitle }}</p>
+            <h1 class="header__turtual_head" >{{ .Title }}</h1>
+            <p class="header__turtual_text" >{{ .Subtitle }}</p>
             <img class="top-img" src="{{ .Image }}" alt="polarlight">
             <div class="body-text">
                 <p class="top-text">{{ .Content }}</p>
@@ -40,7 +47,7 @@
 
     {{ range .Footer }}
         <footer class="footer">
-            <img class="footer_img" src="{{ .Background }}" alt="footer">
+            <img class="footer_img wrapper" src="{{ .Background }}" alt="footer">
             <div class="footer_1">
                 <p class="footer_head">{{ .Title}}</p>
                 <div class="search-form">
@@ -48,21 +55,28 @@
                     <button class="search-form__btn" type="button">{{ .Button}}</button>
                 </div>
             </div>
-            <img class="Rectangl_img" src="{{ .Rectangl }}" alt="Rectangl">
+            <img class="Rectangl_img wrapper" src="{{ .Rectangl }}" alt="Rectangl">
             {{ range .Bottom }}
-                <div class="footer_2 footer_title header__title">
-                    <img class="escape_img" src="{{ .Escape }}" alt="Escape1" >
+                <div class="footer_2 header__title">
+                    <img class="escape_img" src="{{ .Escape }}" alt="Escape" >
                     {{ range .Nav }}
-                        <ul class="header__items">
-                            <li><a class="footer__items_link header__items_link" href="#">{{ .First }}</a></li>
-                            <li><a class="footer__items_link header__items_link" href="#">{{ .Second }}</a></li>
-                            <li><a class="footer__items_link header__items_link" href="#">{{ .Third }}</a></li>
-                            <li><a class="footer__items_link header__items_link" href="#">{{ .Fourth }}</a></li>
+                        <ul class="nav_navigation">
+                            <li><a class="nav_link" href="#">{{ .First }}</a></li>
+                            <li><a class="nav_link" href="#">{{ .Second }}</a></li>
+                            <li><a class="nav_link" href="#">{{ .Third }}</a></li>
+                            <li><a class="nav_link" href="#">{{ .Fourth }}</a></li>
                         </ul>
                     {{ end }}
                 </div>
             {{ end }}
         </footer>
     {{ end }}
+
+    <script>
+        function openMenu(){
+            document.getElementById("sidebar").classList.toggle('active')
+        }
+    </script>
+
 </body>
 </html>

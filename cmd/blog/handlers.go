@@ -14,7 +14,6 @@ import (
 
 type indexPage struct {
 	Header             []headerdata
-	PostsHeader        []postsheaderdata
 	Menu               []menudata
 	FeaturedPostsTitle string
 	FeaturedPosts      []*featuredPosts
@@ -32,6 +31,7 @@ type postPage struct {
 type headerdata struct {
 	BackroundHeader string
 	HeaderTitle     []headertitledata
+	PostsHeader     []postsheaderdata
 }
 
 type headertitledata struct {
@@ -115,6 +115,11 @@ type footerdata struct {
 	Bottom     []bottomdata
 }
 
+type bottomdata struct {
+	Escape string
+	Nav    []navdata
+}
+
 type loginpage struct {
 	Background string
 	Header     []headerlogindata
@@ -137,12 +142,14 @@ type adminpage struct {
 	Header   []headeradmindata
 	MainTop  []maintopdata
 	MainInfo []maininfodata
+	Content  []contentdata
 }
 
 type headeradmindata struct {
 	Logo      string
 	Avatar    string
 	ImageExit string
+	Exit      string
 }
 
 type maintopdata struct {
@@ -158,32 +165,52 @@ type maininfodata struct {
 }
 
 type fieldsdata struct {
-	Title         string
-	Description   string
-	AuthorName    string
-	TitlAuthorUrl string
-	AuthorPhoto   string
-	Upload        string
-	Date          string
-	TitleImage    string
-	BigImageURL   string
-	SmallImageURL string
-	BigNote       string
-	SmallNote     string
+	Title          string
+	SubTitle       string
+	AuthorName     string
+	TitlAuthorUrl  string
+	AuthorPhoto    string
+	Upload         string
+	Date           string
+	TitleImage     string
+	HeroBigImage   string
+	HeroSmallImage string
+	BigNote        string
+	SmallNote      string
 }
 
 type previewdata struct {
-	Title1   string
-	Image1   string
-	Subtitle string
-	Text     string
-	Title2   string
-	Image2   string
+	Article  []articledata
+	PostCard []postcarddata
 }
 
-type bottomdata struct {
-	Escape string
-	Nav    []navdata
+type articledata struct {
+	Label    string
+	FrameURL string
+	Title    string
+	Subtitle string
+	Imageurl string
+}
+
+type postcarddata struct {
+	Label          string
+	FrameURL       string
+	Imageurl       string
+	Title          string
+	Subtitle       string
+	AuthorPhotoURL string
+	AuthorName     string
+	Data           string
+}
+
+type contentdata struct {
+	Title   string
+	Comment string
+}
+
+type UserRequest struct {
+	Email    string `json:"Email"`
+	Password string `json:"Password"`
 }
 
 func index(db *sqlx.DB) func(w http.ResponseWriter, r *http.Request) { // Функция для отдачи страницы
@@ -211,7 +238,6 @@ func index(db *sqlx.DB) func(w http.ResponseWriter, r *http.Request) { // Фун
 
 		data := indexPage{
 			Header:             header(),
-			PostsHeader:        postsheader(),
 			Menu:               menu(),
 			FeaturedPostsTitle: "Featured Posts",
 			FeaturedPosts:      featuredposts,
@@ -309,6 +335,7 @@ func admin(w http.ResponseWriter, r *http.Request) {
 		Header:   headeradmin(),
 		MainTop:  maintop(),
 		MainInfo: maininfo(),
+		Content:  content(),
 	}
 
 	err = ts.Execute(w, data)
@@ -324,6 +351,7 @@ func header() []headerdata {
 		{
 			BackroundHeader: "../static/images/head.png",
 			HeaderTitle:     headertitle(),
+			PostsHeader:     postsheader(),
 		},
 	}
 }
@@ -519,9 +547,10 @@ func mainlogin() []mainlogindata {
 func headeradmin() []headeradmindata {
 	return []headeradmindata{
 		{
-			Logo:      "../static/svg_files/escape_author_white.svg",
+			Logo:      "../static/images/escape_author_white.svg",
 			Avatar:    "../static/images/avatar.png",
 			ImageExit: "/login",
+			Exit:      "../static/images/log-out.svg",
 		},
 	}
 }
@@ -549,18 +578,18 @@ func maininfo() []maininfodata {
 func fields() []fieldsdata {
 	return []fieldsdata{
 		{
-			Title:         "Title",
-			Description:   "Short description",
-			AuthorName:    "Author Name",
-			TitlAuthorUrl: "Author Photo",
-			AuthorPhoto:   "../static/svg_files/photo_icon.svg",
-			Upload:        "Upload",
-			Date:          "Publish Date",
-			TitleImage:    "Hero image",
-			BigImageURL:   "../static/images/hero_image_big.png",
-			SmallImageURL: "../static/images/hero_image_small.png",
-			BigNote:       "Size up to 10mb. Format: png, jpeg, gif.",
-			SmallNote:     "Size up to 5mb. Format: png, jpeg, gif.",
+			Title:          "Title",
+			SubTitle:       "Short description",
+			AuthorName:     "Author Name",
+			TitlAuthorUrl:  "Author Photo",
+			AuthorPhoto:    "../static/images/camera.svg",
+			Upload:         "Upload",
+			Date:           "Publish Date",
+			TitleImage:     "Hero image",
+			HeroBigImage:   "../static/images/hero_image_big.png",
+			HeroSmallImage: "../static/images/hero_image_small.png",
+			BigNote:        "Size up to 10mb. Format: png, jpeg, gif.",
+			SmallNote:      "Size up to 5mb. Format: png, jpeg, gif.",
 		},
 	}
 }
@@ -568,12 +597,44 @@ func fields() []fieldsdata {
 func preview() []previewdata {
 	return []previewdata{
 		{
-			Title1:   "New Post",
-			Image1:   "../static/images/aritcle_frame.png",
-			Subtitle: "New Post",
-			Text:     "Please, enter any description",
-			Title2:   "New Post",
-			Image2:   "../static/images/aritcle_frame.png",
+			Article:  article(),
+			PostCard: postcard(),
+		},
+	}
+}
+
+func article() []articledata {
+	return []articledata{
+		{
+			Label:    "Article preview",
+			FrameURL: "../static/images/aritcle_frame.png",
+			Title:    "New Post",
+			Subtitle: "Please, enter any description",
+			Imageurl: "../static/images/image_not_selected.png",
+		},
+	}
+}
+
+func postcard() []postcarddata {
+	return []postcarddata{
+		{
+			Label:          "Post card preview",
+			FrameURL:       "../static/images/post_card_frame.png",
+			Imageurl:       "../static/images/image_not_selected.png",
+			Title:          "New Post",
+			Subtitle:       "Please, enter any description",
+			AuthorPhotoURL: "../static/images/photo_icon.svg",
+			AuthorName:     "Enter author name",
+			Data:           "4/19/2023",
+		},
+	}
+}
+
+func content() []contentdata {
+	return []contentdata{
+		{
+			Title:   "Content",
+			Comment: "Post content (plain text)",
 		},
 	}
 }

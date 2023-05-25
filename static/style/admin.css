@@ -30,9 +30,21 @@ body {
 
 }
 
-.capbar__other {
+.header__avatar-and-exit
+{
     display: flex;
-    gap: 10px;
+    align-items: center;
+}
+
+.header__avatar
+{
+    margin-right: 12px;
+}
+
+.header__exit
+{
+    margin-top: 4px;
+    margin-left: 12px;
 }
 
 .capbar__first-char {
@@ -68,6 +80,7 @@ body {
     justify-content: space-between;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 50px;
     margin-bottom: 50px;
 }
 
@@ -86,6 +99,7 @@ body {
     font-weight: 400;
     font-size: 14px;
     line-height: 20px;
+    margin-top: 5px;
     color: rgba(46, 46, 46, 0.63);
 }
 
@@ -189,12 +203,13 @@ body {
 }
 
 .text-upload {
-    font-family: 'Oxygen';
-    font-style: normal;
+    font-family: 'Oxygen';  
     font-weight: 400;
+    font-size: 12px;
     font-size: 16px;
     line-height: 24px;
-    color: #2E2E2E;
+    margin-top: 5px;
+    color: rgba(153, 153, 153, 1)
 }
 
 .small-image__size {
@@ -209,4 +224,193 @@ body {
     position: relative;
     top: -220px;
     text-align: center;
+}
+
+.main-info__article-label
+{
+    font: 400 normal 15px/20px 'Oxygen';
+    margin-bottom: 18px;
+    color: rgba(122, 122, 122, 1);
+}
+
+.main-info__article-preview
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 440px;
+    height: 385px;
+    margin-bottom: 44px;
+}
+
+.main-info__article-preview-frame
+{
+    position: absolute;
+    z-index: 1;
+}
+
+.main-info__article-title
+{
+    margin-top: 97px;
+    font: 400 normal 22px/24px 'Lora';
+    color: #2E2E2E;
+}
+
+.main-info__article-description
+{
+    margin-top: 6px;
+    font: 400 normal 11px/12px 'Oxygen';
+    color: rgba(46, 46, 46, 0.63);
+}
+
+.main-info__article-image
+{
+    margin-top: 38px;
+    height: 160px;
+    width: 408px;
+}
+
+.main-info__article-gradient
+{
+    position: absolute;
+    width: 119px;
+    height: 385px;
+    margin-left: 290px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 84.72%);
+}
+
+.main-info__post-card-label
+{
+    font: 400 normal 15px/20px 'Oxygen';
+    margin-bottom: 19px;
+    color: rgba(122, 122, 122, 1);
+}
+
+.main-info__post-card-preview
+{
+    width: 440px;
+    height: 360px;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-info__post-card-preview-frame
+{
+    position: absolute;
+    z-index: 1;
+}
+
+.main-info__post-card-preview-elements
+{
+    margin: 32px 0 0 16px;
+    width: 296px;
+    height: 291px;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-info__post-card-image
+{
+    width: 294px;
+    height: 150px;
+    border: 1px solid #D3D3D3;
+}
+
+.main-info__border
+{
+    border: 1px solid #D3D3D3;
+}
+
+.main-info__post-card-title
+{
+    font: 400 normal 16px/21px 'Lora';
+    color: #101315;
+    margin: 14px 0 0 13px;
+}
+
+.main-info__post-card-description
+{
+    font: 400 normal 13px/19px 'Oxygen';
+    color: #7A7A7A;
+    margin: 7px 0 32px 13px;
+}
+
+.main-info__post-card-author-photo
+{
+    margin: 12px 0 12px 13px;
+    width: 26px;
+    height: 26px;
+}
+
+.main-info__post-card-author-data
+{
+    margin-top: 8px;
+    font: 400 normal 12px/35px 'Oxygen';
+    color: #999999;
+}
+
+.main-info__post-info
+{
+    display: grid;
+    grid-template-columns: 49px 1fr 1fr;
+    background-color: #FCFCFC;
+}
+
+.main-info_post-card-data
+{
+    text-align: right;
+    margin-right: 13px;
+}
+
+.main-info__post-card-gradient-vertical
+{
+    position: absolute;
+    width: 374px;
+    height: 396px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 84.72%);
+    margin-left: 69px;
+}
+
+.main-info__post-card-gradient-gorizontal
+{
+    position: absolute;
+    height: 85px;
+    width: 440px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%);
+    margin-top: 278px;
+}
+
+.z-top
+{
+    z-index: 2;
+}
+
+.content
+{
+    margin-top: 16px;
+    background-color: white;
+}
+
+.content__title
+{
+    margin-bottom: 44px;
+    font: 400 normal 28px/30px 'Lora';
+}
+
+.content__comment
+{
+    font: 400 normal 13px/16px 'Oxygen';
+    color: #7A7A7A;
+}
+
+.content__field-for-content
+{
+    width: 940px;
+    height: 160px;
+    background: #FFFFFF;
+    border: 1px solid #EAEAEA;
+    border-radius: 5px;
+    padding: 12px;
+    font: 400 normal 17px/24px 'Oxygen';
+    margin-bottom: 56px;
 }

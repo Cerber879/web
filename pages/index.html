@@ -8,42 +8,50 @@
     <link rel="stylesheet" href="static/style/style1.css">
     <link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lora&family=Oxygen&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width">
     <title>Document</title>
 </head>
 
 <body>
     {{ range .Header }}
-        <header class="header">
+        <header class="header wrapper">
             <img class="head_img" src="{{ .BackroundHeader }}" alt="head">
             {{ range .HeaderTitle }}
                 <div class="header__title">
                     <img src="{{ .Escape }}" alt="Escape1" >
                     {{ range .Nav }}
-                        <ul class="navigation" >
-                            <li><a class="navigation__link" href="#">{{ .First }}</a></li>
-                            <li><a class="navigation__link" href="#">{{ .Second }}</a></li>
-                            <li><a class="navigation__link" href="#">{{ .Third }}</a></li>
-                            <li><a class="navigation__link" href="#">{{ .Fourth }}</a></li>
-                        </ul> 
+                        <div  id="sidebar">
+                            <div class="toggle-btn" onclick="openMenu()">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <ul class="navigation" >
+                                <li class="navigation__link"><a class="navigation__link" href="#">{{ .First }}</a></li>
+                                <li class="navigation__link"><a class="navigation__link" href="#">{{ .Second }}</a></li>
+                                <li class="navigation__link"><a class="navigation__link" href="#">{{ .Third }}</a></li>
+                                <li class="navigation__link"><a class="navigation__link" href="#">{{ .Fourth }}</a></li>
+                            </ul> 
+                        </div>                       
                     {{ end }}
                 </div> 
             {{ end }} 
+            {{ range .PostsHeader }}
+                <div class="header__turtual">
+                    <h1 class="header__turtual_head" >{{ .Title }}</h1>
+                    <p class="header__turtual_text" >{{ .Subtitle }}</p>
+                    <button class="header__turtual_button" type="button">{{ .Button }}</button>
+                </div>
+            {{ end }}
         </header>
     {{ end }}
 
-    {{ range .PostsHeader }}
-        <div class="header__turtual">
-            <h1 class="header__turtual_head" >{{ .Title }}</h1>
-            <p class="header__turtual_text" >{{ .Subtitle }}</p>
-            <button class="header__turtual_button" type="button">{{ .Button }}</button>
-        </div>
-    {{ end }}
 
     {{ range .Menu }}
-        <div class="navigation-menu">
-            <img class="rect_img" src="{{ .BackroundMenu }}" alt="Rect">
+        <div class="navigation-menu wrapper">
+            <img class="rect_img wrapper" src="{{ .BackroundMenu }}" alt="Rect">
             {{ range .MenuTitle }}
-                <ul class="menu-items header__title">
+                <ul class="menu-items">
                     <li><a class="menu-items__link" href="#">{{ .First }}</a></li>
                     <li><a class="menu-items__link" href="#">{{ .Second }}</a></li>
                     <li><a class="menu-items__link" href="#">{{ .Third }}</a></li>
@@ -55,8 +63,10 @@
         </div>
     {{ end }}
 
-    <article class="feature">
-        <h2 class="feature_head">{{ .FeaturedPostsTitle }}</h2>
+    <article class="feature wrapper">
+            <div class="feature_turtual">
+                <h2 class="feature_head">{{ .FeaturedPostsTitle }}</h2>
+            </div>
             <div class="feature__most">
                 {{ range .FeaturedPosts }}
                     <div class="feature__road">
@@ -77,20 +87,24 @@
             </div>
     </article>
 
-    <article class="recent">
-        <h2 class="recent_title">{{ .MostRecentTitle }}</h2> 
+    <article class="recent wrapper">
+            <div class="recent_turtual">
+                <h2 class="recent_title">{{ .MostRecentTitle }}</h2> 
+            </div>     
             <div class="recent-body">
                 {{ range .MostRecent }}
                     <div class="recent-body__item"> 
-                        <img src="{{ .Imageurl }}" alt="still">
+                        <img class="second_img" src="{{ .Imageurl }}" alt="still">
                         <a class="most-recent__title-and-description" href="{{ .PostURL }}">
                             <p class="recent-body__title">{{ .Title }}</p> 
                             <span class="recent-body__text">{{ .Subtitle }}</span>
                         </a>   
                         <div class="recent-body__info">
-                            <img src="{{ .Authorurl }}" alt="wili">
-                            <span class="recent-body_name">{{ .Author }}</span>
-                            <span class="recent-body_date recent-body_name">{{ .Publishdate }}</span>
+                            <div class="recent-body__info__author">
+                                <img src="{{ .Authorurl }}" alt="wili">
+                                <span class="recent-body_name">{{ .Author }}</span>
+                            </div>
+                            <span class="recent-body_date">{{ .Publishdate }}</span>
                         </div>
                     </div>
                 {{ end }}
@@ -99,7 +113,7 @@
 
     {{ range .Footer }}
         <footer class="footer">
-            <img class="footer_img" src="{{ .Background }}" alt="footer">
+            <img class="footer_img wrapper" src="{{ .Background }}" alt="footer">
             <div class="footer_1">
                 <p class="footer_head">{{ .Title}}</p>
                 <div class="search-form">
@@ -107,22 +121,29 @@
                     <button class="search-form__btn" type="button">{{ .Button}}</button>
                 </div>
             </div>
-            <img class="Rectangl_img" src="{{ .Rectangl }}" alt="Rectangl">
+            <img class="Rectangl_img wrapper" src="{{ .Rectangl }}" alt="Rectangl">
             {{ range .Bottom }}
                 <div class="footer_2 header__title">
                     <img class="escape_img" src="{{ .Escape }}" alt="Escape" >
                     {{ range .Nav }}
-                        <ul class="navigation">
-                            <li><a class="navigation__link" href="#">{{ .First }}</a></li>
-                            <li><a class="navigation__link" href="#">{{ .Second }}</a></li>
-                            <li><a class="navigation__link" href="#">{{ .Third }}</a></li>
-                            <li><a class="navigation__link" href="#">{{ .Fourth }}</a></li>
+                        <ul class="nav_navigation">
+                            <li><a class="nav_link" href="#">{{ .First }}</a></li>
+                            <li><a class="nav_link" href="#">{{ .Second }}</a></li>
+                            <li><a class="nav_link" href="#">{{ .Third }}</a></li>
+                            <li><a class="nav_link" href="#">{{ .Fourth }}</a></li>
                         </ul>
                     {{ end }}
                 </div>
             {{ end }}
         </footer>
     {{ end }}
+
+    <script>
+        function openMenu(){
+            document.getElementById("sidebar").classList.toggle('active')
+        }
+    </script>
+
 
 </body>
 </html>

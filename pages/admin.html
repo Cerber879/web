@@ -28,12 +28,15 @@
     {{ end }}
 
     {{range .MainTop}}
-    <article class="main-info">
-        <section>
-            <p class="main-info__title">{{.Title}}</p>
-            <p class="main-info__subtitle">{{.Subtitle}}</p>
-        </section>
-        <button type="sumbit" class="main-info__button" onclick="Click()">{{.Button}}</button>
+    <article class="main-top">
+        <div class="main-top__info">
+            <div>
+                <h1 class="main-top__title">{{ .Title }}</h1>
+                <p class="main-top__subtitle">{{ .Subtitle }}</p>
+            </div>
+            <button class="main-top__button" onclick="Click()">{{ .Button }}</button>
+        </div>
+        <div id="validation-error" class="width-container"></div>
     </article>
     {{end}}
 
@@ -52,7 +55,7 @@
 
                 <div class="input__description">
                     <p class="text-style">{{.SubTitle}}</p>
-                    <input id="Subtitle" type="text" class="input-size">
+                    <input id="Subtitle" type="text" class="input-size" placeholder="Please, enter any description">
                 </div>
 
                 <div class="input__name">
@@ -63,8 +66,9 @@
                 <div class="input__image-author">
                     <p class="text-style">{{.TitlAuthorUrl}}</p>
                     <div class="position-for-url">
-                        <label id="author-icon" for="author-image">
-                            <img class="kek" src={{.AuthorPhoto}} alt="">
+                        <label class="position-for-url">
+                            <input id="author-photo" type="file" accept=".png, .jpeg, .jpg" style="visibility:hidden; position: absolute;" onchange="ChangeAuthorPhoto()">
+                            <img id="author-photo-image" class="author-photo" src={{.AuthorPhoto}} alt="">
                             <p class="text-upload">{{.Upload}}</p>
                         </label>
                     </div>
@@ -72,17 +76,17 @@
 
                 <div class="input__date">
                     <p class="text-style">{{.Date}}</p>
-                    <input type="date" class="input-size">
+                    <input id="data" type="date" class="input-size">
                 </div>
 
                 <div class="input__big-image">
 
                     <p class="text-style">{{.TitleImage}}</p>
-                    <input id="big-image" class="trash-hidden" type="file">
+                    <input id="big-hero-image" class="trash-hidden" type="file" onchange="ChangeBigImage()">
 
-                    <label for="big-image">
+                    <label for="big-hero-image">
                         <div class="big-image__size position__bs-image">
-                            <img src={{.HeroBigImage}} alt="">
+                            <img id="big-image" class="main-info__big-image" src={{.HeroBigImage}} alt="">
                         </div>
                     </label>
                     <p class="text-upload">{{.BigNote}}</p>
@@ -91,11 +95,11 @@
                 <div class="inpit__small-image">
 
                     <p class="text-style">{{.TitleImage}}</p>
-                    <input id="small-image" class="trash-hidden" type="file">
+                    <input id="small-hero-image" class="trash-hidden" type="file" onchange="ChangeSmallImage()">
 
-                    <label for="small-image">
+                    <label for="small-hero-image" for="small-image">
                         <div class="small-image__size position__bs-image">
-                            <img src="{{.HeroSmallImage}}" alt="">
+                            <img id="small-image" class="main-info__small-image" src="{{.HeroSmallImage}}" alt="">
                         </div>
                     </label>
                     <p class="text-upload">{{.SmallNote}}</p>

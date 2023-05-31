@@ -582,7 +582,7 @@ func fields() []fieldsdata {
 			SubTitle:       "Short description",
 			AuthorName:     "Author Name",
 			TitlAuthorUrl:  "Author Photo",
-			AuthorPhoto:    "../static/images/camera.svg",
+			AuthorPhoto:    "../static/images/photo_icon.svg",
 			Upload:         "Upload",
 			Date:           "Publish Date",
 			TitleImage:     "Hero image",

@@ -72,50 +72,51 @@ body {
     gap: 10px;
 }
 
-.main-info {
-    padding-top: 10px;
+.main-top {
+    margin: auto;
+    width: 77%;
+    margin-top: 70px;
+}
+
+.main-top__info {
     display: flex;
-    align-items: center;
-    width: 1300px;
     justify-content: space-between;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 50px;
-    margin-bottom: 50px;
+    align-items: center;
+    margin-bottom: 32px;
 }
 
-.main-info__title {
-    font-family: 'Lora';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 34px;
-    line-height: 40px;
-    color: #000000;
+.main-top__title {
+    font: 400 normal 35px/40px 'Lora';
+    margin-bottom: 11px;
 }
 
-.main-info__subtitle {
-    font-family: 'Oxygen';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 20px;
-    margin-top: 5px;
+.main-top__subtitle {
+    font: 400 normal 14px/20px 'Oxygen';
     color: rgba(46, 46, 46, 0.63);
 }
 
-.main-info__button {
-    font-family: 'Oxygen';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
-    color: #FFFFFF;
-
-    width: 100px;
-    height: 48px;
+.main-top__button {
+    width: 105px;
+    height: 50px;
+    border: 0;
     background: #DD783F;
     border-radius: 3px;
-    border-style: none;
+    color: white;
+    font: 400 normal 16px/24px 'Oxygen';
+}
+
+.main-top__message_complited {
+    max-height: 44px;
+    font: normal 400 14px/20px "Oxygen";
+    color: #2e2e2e;
+    background: #FFEBEA;
+    border-left: 2px solid #E86961;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 10px 12px;
+    margin-bottom: 16px;
 }
 
 .all-inputs {
@@ -167,6 +168,12 @@ body {
     gap: 10px
 }
 
+.author-photo {
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
+}
+
 .trash-hidden {
     visibility: hidden;
     position: absolute;
@@ -195,6 +202,11 @@ body {
     border-radius: 6px;
 }
 
+.big-image {
+    width: 100%;
+    height: 100%;
+}
+
 .position__bs-image {
     display: flex;
     align-items: center;
@@ -210,6 +222,16 @@ body {
     line-height: 24px;
     margin-top: 5px;
     color: rgba(153, 153, 153, 1)
+}
+
+.main-info__big-image {
+    max-width: 560px;
+    max-height: 160px;
+}
+
+.main-info__small-image {
+    max-width: 296px;
+    max-height: 150px;
 }
 
 .small-image__size {

@@ -1,168 +1,194 @@
-var Title = {
-    name: "Title",
-    value: null,
-}
-var SubTitle = {
-    name: "SubTitle",
-    value: null,
-}
-var AuthorName = {
-    name: "AuthorName",
-    value: null,
-}
-var AuthorPhoto = {
-    name: "AuthorPhoto",
-    value: null,
-}
+var title = {
+    fieldname: "title",
+    value: null
+};
+
+var subTitle = {
+    fieldname: "subTitle",
+    value: null
+};
+
+var authorName = {
+    fieldname: "authorName",
+    value: null
+};
+var authorPhoto = {
+    fieldname: "authorPhoto",
+    value: null
+};
+var bigImage = {
+    fieldname: "bigImage",
+    value: null
+};
+var smallImage = {
+    fieldname: "miniImage",
+    value: null
+};
+
 var Data = {
-    name: "Data",
-    value: null,
-}
-var HeroBigImage = {
-    name: "HeroBigImage",
-    value: null,
-}
-var HeroSmallImage = {
-    name: "HeroSmallImage",
-    value: null,
-}
-var Content = {
-    name: "Content",
-    value: null,
-}
+    fieldname: "Data",
+    value: null
+};
 
-const readerAuthor = new FileReader();
-const readerBig = new FileReader();
-const readerSmall = new FileReader();
-
-let userTitle
-let userSubTitle
-let userAuthorName
-let userAuthorPhoto
-let authorIcon
-let userData
-let userBigImage
-let BImage
-let userSmallImage
-let SImage
-let userContent
-
-let getTitleArticle
-let getSubTitleArticle
-let getTitle
-let getSubTitle
-let getAuthorName
-let getAuthorPhoto
-let getData
-let getBigImage
-let getSmallImage
-
-function onload() {
-    userTitle = document.getElementById('title');
-    userSubTitle = document.getElementById('subtitle');
-    userAuthorName = document.getElementById('author-name');
-    authorIcon = document.getElementById('author-icon');
-    userData = document.getElementById('data');
-    BImage = document.getElementById('big-image');
-    SImage = document.getElementById('small-image');
-    userContent = document.getElementById('content');
-
-    getTitleArticle = document.getElementById('preview-title-article');
-    getTitle = document.getElementById('preview-title');
-    getSubTitle = document.getElementById('preview-subtitle');
-    getSubTitleArticle = document.getElementById('preview-subtitle-article');
-    getAuthorName = document.getElementById('preview-author-name');
-    getAuthorPhoto = document.getElementById('preview-author-photo');
-    getData = document.getElementById('preview-data');
-    getBigImage = document.getElementById('preview-big-image');
-    getSmallImage = document.getElementById('preview-small-image');
-}
+var postContent = {
+    fieldname: "postContent",
+    value: null
+};
 
 function Click() {
-    PrintToLog();
+    ChangePreview();
 }
 
-function PrintToLog() {
-    if ((userTitle.value !== "") && (userSubTitle.value !== "") && (AuthorName.value !== "") && (authorIcon.src !== "file:///E:/web/Blog/static/svg_files/photo_icon.svg") && (userData.value !== "") && (BImage.src !== "file:///E:/web/Blog/static/images/hero_image_big.png") && (SImage.src !== "file:///E:/web/Blog/static/images/hero_image_small.png") && (Content !== "")) {
-        Title.value = userTitle.value;
-        console.log(Title.name, ':', Title.value);
-        SubTitle.value = userSubTitle.value;
-        console.log(SubTitle.name, ':', SubTitle.value);
-        AuthorName.value = userAuthorName.value;
-        console.log(AuthorName.name, ':', AuthorName.value);
-        AuthorPhoto.value = authorIcon.src;
-        console.log(AuthorPhoto.name, ':', AuthorPhoto.value);
-        Data.value = userData.value;
-        console.log(Data.name, ':', Data.value);
-        HeroBigImage.value = BImage.src;
-        console.log(HeroBigImage.name, ':', HeroBigImage.value);
-        HeroSmallImage.value = SImage.src;
-        console.log(HeroSmallImage.name, ':', HeroSmallImage.value);
-        Content.value = userContent.value;
-        console.log(Content.name, ':', Content.value);
-        Preview();
-    }
-    else {
-        console.log("Ошибка!!!! Некоторое поле пустое");
-    }
+function ChangePreview() {
+    getDataFromForms();
+    ChangePostAuthorPhoto();
+    ChangePostBigImage();
+    ChangePostSmallImage();
+    validateForm();
 }
 
-function Preview() {
-    getTitleArticle.innerHTML = Title.value;
-    getTitle.innerHTML = Title.value;
-    getSubTitleArticle.innerHTML = SubTitle.value;
-    getSubTitle.innerHTML = SubTitle.value;
-    getAuthorName.innerHTML = AuthorName.value;
-    getAuthorPhoto.src = AuthorPhoto.value;
-    getData.innerHTML = Data.value;
-    getBigImage.src = HeroBigImage.value;
-    getSmallImage.src = HeroSmallImage.value;
+function getDataFromForms() {
+
+
+    let titleArticle = document.getElementById('preview-title-article');
+    let titlePost = document.getElementById('preview-title');
+    let title = document.getElementById('Title');
+    let subTitle = document.getElementById('Subtitle');
+    let subTitleArticle = document.getElementById('preview-subtitle-article');
+    let subTitlePost = document.getElementById('preview-subtitle');
+    let authorName = document.getElementById('Author-name');
+    let authorNamePost = document.getElementById('preview-author-name');
+    let Data = document.getElementById('data');
+    let dataPost = document.getElementById('preview-data');
+
+
+    titleArticle.innerHTML = title.value;
+    titlePost.innerHTML = title.value;
+    subTitleArticle.innerHTML = subTitle.value;
+    subTitlePost.innerHTML = subTitle.value;
+    authorNamePost.innerHTML = authorName.value;
+    authorPhoto.src = authorPhoto.value;
+    dataPost.innerHTML = Data.value;
 }
 
-function ChangeIcon() {
-    userAuthorPhoto = document.getElementById('author-photo').files[0];
+function ChangeAuthorPhoto() {
+    let fileInput = document.getElementById("author-photo");
+    let file = fileInput.files[0];
 
-    readerAuthor.addEventListener(
-        "load",
-        () => {
-            authorIcon.src = readerAuthor.result;
-        },
-        false
-    );
+    if (file) {
 
-    if (userAuthorPhoto) {
-        readerAuthor.readAsDataURL(userAuthorPhoto);
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+            const authorPhoto = document.getElementById("author-photo-image");
+            authorPhoto.src = reader.result;
+        }, false);
+
+        reader.readAsDataURL(file);
     }
 }
-
 function ChangeBigImage() {
-    userBigImage = document.getElementById('hero-image-big').files[0];
+    let fileInput = document.getElementById("big-hero-image");
+    let file = fileInput.files[0];
 
-    readerBig.addEventListener(
-        "load",
-        () => {
-            BImage.src = readerBig.result;
-        },
-        false
-    );
+    if (file) {
 
-    if (userBigImage) {
-        readerBig.readAsDataURL(userBigImage);
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+            const authorPhoto = document.getElementById("big-image");
+            authorPhoto.src = reader.result;
+        }, false);
+
+        reader.readAsDataURL(file);
+    }
+}
+function ChangeSmallImage() {
+    let fileInput = document.getElementById("small-hero-image");
+    let file = fileInput.files[0];
+
+    if (file) {
+
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+            const authorPhoto = document.getElementById("small-image");
+            authorPhoto.src = reader.result;
+        }, false);
+
+        reader.readAsDataURL(file);
+    }
+}
+function ChangePostAuthorPhoto() {
+    let fileInput = document.getElementById("author-photo");
+    let file = fileInput.files[0];
+
+    if (file) {
+
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+            const authorPhoto = document.getElementById("preview-author-photo");
+            authorPhoto.src = reader.result;
+        }, false);
+
+        reader.readAsDataURL(file);
+    }
+}
+function ChangePostBigImage() {
+    let fileInput = document.getElementById("big-hero-image");
+    let file = fileInput.files[0];
+
+    if (file) {
+
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+            const authorPhoto = document.getElementById("preview-big-image");
+            authorPhoto.src = reader.result;
+        }, false);
+
+        reader.readAsDataURL(file);
+    }
+}
+function ChangePostSmallImage() {
+    let fileInput = document.getElementById("small-hero-image");
+    let file = fileInput.files[0];
+
+    if (file) {
+
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+            const authorPhoto = document.getElementById("preview-small-image");
+            authorPhoto.src = reader.result;
+        }, false);
+
+        reader.readAsDataURL(file);
     }
 }
 
-function ChangeSmallImage() {
-    userSmallImage = document.getElementById('hero-image-small').files[0];
+function validateForm() {
+    var inputs = document.getElementsByTagName("input");
+    for (var i = 0; i < inputs.length; i++) {
+        if (inputs[i].value == "") {
+            var error = document.querySelector(".main-top__message_complited");
+            if (!error) {
+                error = document.createElement("div");
+                error.classList.add("main-top__message_complited");
 
-    readerSmall.addEventListener(
-        "load",
-        () => {
-            SImage.src = readerSmall.result;
-        },
-        false
-    );
+                var errorIcon = document.createElement("img");
+                errorIcon.src = "../static/images/alert_circle.svg";
+                error.appendChild(errorIcon);
 
-    if (userSmallImage) {
-        readerSmall.readAsDataURL(userSmallImage);
+                var errorMessage = document.createElement("span");
+                errorMessage.innerHTML = "Whoops! Some fields need your attention";
+                error.insertBefore(errorIcon, error.firstChild);
+                error.appendChild(errorMessage);
+                document.getElementById("validation-error").appendChild(error);
+            }
+            break;
+        }
+    }
+    if (!error && inputs.length > 0) {
+        error = document.querySelector(".main-top__massage_complited");
+        if (error) {
+            error.remove();
+        }
+        
     }
 }

@@ -1,194 +1,252 @@
-var title = {
-    fieldname: "title",
-    value: null
-};
+//document.addEventListener('DOMContentLoaded', function () {
+const form = document.getElementById('form');
+form.addEventListener('sumbit', formSend);
 
-var subTitle = {
-    fieldname: "subTitle",
-    value: null
-};
+async function formSend() {
+    let error = formValidate(form);
 
-var authorName = {
-    fieldname: "authorName",
-    value: null
-};
-var authorPhoto = {
-    fieldname: "authorPhoto",
-    value: null
-};
-var bigImage = {
-    fieldname: "bigImage",
-    value: null
-};
-var smallImage = {
-    fieldname: "miniImage",
-    value: null
-};
-
-var Data = {
-    fieldname: "Data",
-    value: null
-};
-
-var postContent = {
-    fieldname: "postContent",
-    value: null
-};
-
-function Click() {
-    ChangePreview();
-}
-
-function ChangePreview() {
-    getDataFromForms();
-    ChangePostAuthorPhoto();
-    ChangePostBigImage();
-    ChangePostSmallImage();
-    validateForm();
-}
-
-function getDataFromForms() {
-
-
-    let titleArticle = document.getElementById('preview-title-article');
-    let titlePost = document.getElementById('preview-title');
-    let title = document.getElementById('Title');
-    let subTitle = document.getElementById('Subtitle');
-    let subTitleArticle = document.getElementById('preview-subtitle-article');
-    let subTitlePost = document.getElementById('preview-subtitle');
-    let authorName = document.getElementById('Author-name');
-    let authorNamePost = document.getElementById('preview-author-name');
-    let Data = document.getElementById('data');
-    let dataPost = document.getElementById('preview-data');
-
-
-    titleArticle.innerHTML = title.value;
-    titlePost.innerHTML = title.value;
-    subTitleArticle.innerHTML = subTitle.value;
-    subTitlePost.innerHTML = subTitle.value;
-    authorNamePost.innerHTML = authorName.value;
-    authorPhoto.src = authorPhoto.value;
-    dataPost.innerHTML = Data.value;
-}
-
-function ChangeAuthorPhoto() {
-    let fileInput = document.getElementById("author-photo");
-    let file = fileInput.files[0];
-
-    if (file) {
-
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-            const authorPhoto = document.getElementById("author-photo-image");
-            authorPhoto.src = reader.result;
-        }, false);
-
-        reader.readAsDataURL(file);
-    }
-}
-function ChangeBigImage() {
-    let fileInput = document.getElementById("big-hero-image");
-    let file = fileInput.files[0];
-
-    if (file) {
-
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-            const authorPhoto = document.getElementById("big-image");
-            authorPhoto.src = reader.result;
-        }, false);
-
-        reader.readAsDataURL(file);
-    }
-}
-function ChangeSmallImage() {
-    let fileInput = document.getElementById("small-hero-image");
-    let file = fileInput.files[0];
-
-    if (file) {
-
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-            const authorPhoto = document.getElementById("small-image");
-            authorPhoto.src = reader.result;
-        }, false);
-
-        reader.readAsDataURL(file);
-    }
-}
-function ChangePostAuthorPhoto() {
-    let fileInput = document.getElementById("author-photo");
-    let file = fileInput.files[0];
-
-    if (file) {
-
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-            const authorPhoto = document.getElementById("preview-author-photo");
-            authorPhoto.src = reader.result;
-        }, false);
-
-        reader.readAsDataURL(file);
-    }
-}
-function ChangePostBigImage() {
-    let fileInput = document.getElementById("big-hero-image");
-    let file = fileInput.files[0];
-
-    if (file) {
-
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-            const authorPhoto = document.getElementById("preview-big-image");
-            authorPhoto.src = reader.result;
-        }, false);
-
-        reader.readAsDataURL(file);
-    }
-}
-function ChangePostSmallImage() {
-    let fileInput = document.getElementById("small-hero-image");
-    let file = fileInput.files[0];
-
-    if (file) {
-
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-            const authorPhoto = document.getElementById("preview-small-image");
-            authorPhoto.src = reader.result;
-        }, false);
-
-        reader.readAsDataURL(file);
+    if (error === 0) {
+        //в сервак
+        Preview();
+        publish();
+        alert('корректный ввод данных');
+    } else {
+        alert("не все данные верны, перепроверьте пожалуйста")
     }
 }
 
-function validateForm() {
-    var inputs = document.getElementsByTagName("input");
-    for (var i = 0; i < inputs.length; i++) {
-        if (inputs[i].value == "") {
-            var error = document.querySelector(".main-top__message_complited");
-            if (!error) {
-                error = document.createElement("div");
-                error.classList.add("main-top__message_complited");
-
-                var errorIcon = document.createElement("img");
-                errorIcon.src = "../static/images/alert_circle.svg";
-                error.appendChild(errorIcon);
-
-                var errorMessage = document.createElement("span");
-                errorMessage.innerHTML = "Whoops! Some fields need your attention";
-                error.insertBefore(errorIcon, error.firstChild);
-                error.appendChild(errorMessage);
-                document.getElementById("validation-error").appendChild(error);
-            }
-            break;
+function formValidate(form) {
+    let error = 0;
+    let formReq = document.querySelectorAll('._req');
+    let formReq1 = document.querySelectorAll('._req1');
+    for (let index = 0; index < formReq.length; index++) {
+        const input = formReq[index];
+        formRemoveError(input)
+        if (input.value === "") {
+            formAddError(input);
+            error++;
         }
-    }
-    if (!error && inputs.length > 0) {
-        error = document.querySelector(".main-top__massage_complited");
-        if (error) {
-            error.remove();
+    };
+
+    for (let index = 0; index < formReq1.length; index++) {
+        const input = formReq1[index];
+        formRemoveErrorFile(input)
+        if (input.value === "") {
+            formAddErrorFile(input);
+            error++;
         }
-        
-    }
+    };
+    return error;
+}
+
+function formAddError(input) {
+    input.classList.add('_error');
+}
+
+function formRemoveError(input) {
+    input.classList.remove('_error');
+}
+
+function formAddErrorFile(input) {
+    input.parentElement.classList.add('_error');
+}
+
+function formRemoveErrorFile(input) {
+    input.parentElement.classList.remove('_error');
+}
+
+//take image
+const author_url = document.getElementById("author-image");
+const author_preview = document.getElementById("previewA");
+const big_image = document.getElementById("big-image");
+const small_image = document.getElementById("small-image");
+const parent_big = document.getElementsByClassName("input__big-image");
+const first = document.getElementById("preview-post-one");
+const second = document.getElementById("preview-post-two");
+//take text
+const title = document.getElementsByName("titleInput");
+const subtitle = document.getElementsByName("subtitleInput");
+const date = document.getElementsByName("dateInput");
+const author_name = document.getElementsByName("AnameInput");
+const text_area_content = document.getElementById("text_area");
+let
+    preview_title = document.getElementsByName("preview_title"),
+    preview_subtitle = document.getElementsByName("preview_subtitle"),
+    preview_date = document.getElementsByName("preview_date"),
+    preview_author_name = document.getElementsByName("preview_author_name");
+//take blank
+const block3 = document.getElementById("change_au-image");
+
+
+let post = {
+    "title_g": null,
+    "subtitle_g": null,
+    "author_name_g": null,
+    "date_g": null,
+    "author_url_name": null,
+    "author_url_name_base64": null,
+    "big_image_name": null,
+    "big_image_name_base64": null,
+    "small_image_name": null,
+    "small_image_name_base64": null,
+    "text_area_content_g": null,
+}
+
+
+function Preview() {
+    preview_title[0].textContent = title[0].value;
+    preview_title[1].textContent = title[0].value;
+    preview_author_name[0].textContent = author_name[0].value;
+    preview_date[0].textContent = date[0].value;
+    preview_subtitle[0].textContent = subtitle[0].value;
+    preview_subtitle[1].textContent = subtitle[0].value;
+};
+
+author_url.addEventListener("change", () => {
+    uploadFile(author_url.files[0], author_preview);
+});
+
+
+big_image.addEventListener("change", () => {
+    uploadBig(big_image.files[0], first);
+    block1.children[0].remove();
+});
+
+small_image.addEventListener("change", () => {
+    uploadSmall(small_image.files[0], second);
+    block2.children[0].remove();
+});
+
+function uploadFile(file, filewrite) {
+    var reader = new FileReader();
+    reader.addEventListener("load", () => {
+        filewrite.src = reader.result;
+        if (reader.result != "") {
+            post.author_url_name_base64 = reader.result;
+            block3.src = reader.result;
+        };
+    },
+        false
+    );
+    post.author_url_name = document.getElementById("author-image").files[0].name;
+    reader.readAsDataURL(file);
+};
+
+
+function uploadBig(image) {
+    var reader = new FileReader();
+    const block1 = document.getElementById("block1");
+    reader.addEventListener("load", function (e) {
+        block1.insertAdjacentHTML(
+            "beforeend",
+            `
+            <div>
+                <img class="big-image__size position__bs-image" src = ` + reader.result + `>
+                <div class="position-for-url andpadding">
+                    <div class="position_text_camera">
+                        <img class="" src="../static/images/camera.png">
+                        <span>Upload New </span>
+                    </div>
+                </div>
+            </div>
+            `
+        );
+        if (document.getElementById("big_trash-remove") == null) {
+            block1.insertAdjacentHTML(
+                "afterend",
+                `<div id="big_trash-remove" onclick="mega_remove()">
+                <img src="../static/images/trash-2.png">
+                <span>Remove </span>
+            </div>`
+            )
+        };
+        post.big_image_name_base64 = reader.result;
+        first.src = reader.result;
+    },
+        false
+    );
+    post.big_image_name = document.getElementById("big-image").files[0].name;
+    reader.readAsDataURL(image);
+};
+
+function uploadSmall(image) {
+    var reader = new FileReader();
+    const block2 = document.getElementById("block2");
+    reader.addEventListener("load", function (e) {
+        block2.insertAdjacentHTML(
+            "beforeend",
+            `
+            <div>
+                <img class="small-image__size position__bs-image" src = ` + reader.result + `>
+                <div class="position-for-url andpadding">
+                    <div>
+                        <img class="" src="../static/images/camera.png">
+                        <span>Upload New </span>
+                    </div>
+                </div>
+            </div>
+            `
+        );
+        if (document.getElementById("small_trash-remove") == null) {
+            block2.insertAdjacentHTML("afterend",
+                `<div id="small_trash-remove" onclick="small_remove()">
+                    <img src="../static/images/trash-2.png">
+                    <span>Remove </span>
+                </div>`
+            );
+        };
+        post.small_image_name_base64 = reader.result;
+        second.src = reader.result;
+    },
+        false
+    );
+    post.small_image_name = document.getElementById("small-image").files[0].name;
+    reader.readAsDataURL(image);
+}
+function mega_remove() {
+    let trash_big = document.getElementById("big_trash-remove");
+    trash_big.addEventListener("click",
+        function (e) {
+            trash_big.parentElement.removeChild(block1);
+            trash_big.parentElement.insertAdjacentHTML("beforeend",
+                `<label id="block1" for="big-image">
+                <div class="big-image__size position__bs-image" name="Bblank">
+                    <img src="../static/images/camera.png" alt="">
+                    <p class="text-upload">Upload</p>
+                </div>
+            </label>`);
+            trash_big.parentElement.removeChild(trash_big);
+        },);
+    first.src = "../static/images/kek.jpg";
+}
+
+function small_remove() {
+    let trash_big = document.getElementById("small_trash-remove");
+    trash_big.addEventListener("click",
+        function (e) {
+            trash_big.parentElement.removeChild(block2);
+            trash_big.parentElement.insertAdjacentHTML("beforeend", `
+            <label id="block2" for="small-image">
+                <div class="small-image__size position__bs-image" name="Sblank">
+                    <img src="../static/images/camera.png" alt="">
+                    <p class="text-upload">Upload</p>
+                </div>
+            </label>`);
+            trash_big.parentElement.removeChild(trash_big);
+        },);
+    second.src = "../static/images/kek.jpg";
+}
+
+
+
+function publish() {
+    post.title_g = title[0].value;
+    post.subtitle_g = subtitle[0].value;
+    post.author_name_g = author_name[0].value;
+    post.date_g = date[0].value;
+    post.text_area_content_g = text_area_content.value;
+    let XHR = new XMLHttpRequest();
+    XHR.open('POST', '/api/post');
+    console.log(JSON.stringify(post));
+    XHR.send(JSON.stringify(post));
 }

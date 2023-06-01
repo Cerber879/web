@@ -10,6 +10,12 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
+
+	"encoding/base64"
+	"encoding/json"
+	"io"
+	"os"
+	"strings"
 )
 
 type indexPage struct {
@@ -138,74 +144,23 @@ type mainlogindata struct {
 	Button string
 }
 
-type adminpage struct {
-	Header   []headeradmindata
-	MainTop  []maintopdata
-	MainInfo []maininfodata
-	Content  []contentdata
+type AdminPage struct {
+	AdminHeader []adminheaderdata
+	MainInfo    []maininfodata
+	FullPage    []fullpagedata
 }
 
-type headeradmindata struct {
-	Logo      string
-	Avatar    string
-	ImageExit string
-	Exit      string
-}
-
-type maintopdata struct {
-	Title    string
-	Subtitle string
-	Button   string
+type adminheaderdata struct {
+	ImageLogo1    string
+	ImageLogo2    string
+	FirstCharName string
+	ImageExit     string
 }
 
 type maininfodata struct {
-	Title   string
-	Fields  []fieldsdata
-	Preview []previewdata
-}
-
-type fieldsdata struct {
-	Title          string
-	SubTitle       string
-	AuthorName     string
-	TitlAuthorUrl  string
-	AuthorPhoto    string
-	Upload         string
-	Date           string
-	TitleImage     string
-	HeroBigImage   string
-	HeroSmallImage string
-	BigNote        string
-	SmallNote      string
-}
-
-type previewdata struct {
-	Article  []articledata
-	PostCard []postcarddata
-}
-
-type articledata struct {
-	Label    string
-	FrameURL string
 	Title    string
 	Subtitle string
-	Imageurl string
-}
-
-type postcarddata struct {
-	Label          string
-	FrameURL       string
-	Imageurl       string
-	Title          string
-	Subtitle       string
-	AuthorPhotoURL string
-	AuthorName     string
-	Data           string
-}
-
-type contentdata struct {
-	Title   string
-	Comment string
+	Button   string
 }
 
 type UserRequest struct {
@@ -331,11 +286,10 @@ func admin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data := adminpage{
-		Header:   headeradmin(),
-		MainTop:  maintop(),
-		MainInfo: maininfo(),
-		Content:  content(),
+	data := AdminPage{
+		AdminHeader: adminheader(),
+		MainInfo:    maininfo(),
+		FullPage:    fullpage(),
 	}
 
 	err = ts.Execute(w, data)
@@ -343,6 +297,90 @@ func admin(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Internal Server Error", 500)
 		log.Println(err.Error())
 		return
+	}
+}
+
+func adminheader() []adminheaderdata {
+	return []adminheaderdata{
+		{
+			ImageLogo1:    "../static/images/escapeforadmin.svg",
+			ImageLogo2:    "../static/images/authorforadmin.svg",
+			FirstCharName: "K",
+			ImageExit:     "../static/images/log-out.svg",
+		},
+	}
+}
+
+func maininfo() []maininfodata {
+	return []maininfodata{
+		{
+			Title:    "New Post",
+			Subtitle: "Fill out the form bellow and publish your article",
+			Button:   "Publish",
+		},
+	}
+}
+
+type fullpagedata struct {
+	MainTitle       string
+	Title           string
+	Description     string
+	AuthorName      string
+	TextAuthorphoto string
+	Authorphoto     string
+	TextDate        string
+	ImageCamera     string
+	Upload          string
+	TextImage       string
+
+	PreviewArticle1 string
+	PreviewImage1   string
+
+	PreviewArticle2 string
+	PreviewImage2   string
+
+	TitleInPreview           string
+	SubtitleInPreview        string
+	PreviewImageChange       string
+	PreviewImageChangeAuthor string
+	RandomName               string
+	RandomDate               string
+
+	FooterTitle    string
+	FooterSubtitle string
+
+	ImageMegaCamera string
+	ImageMegaTrash  string
+}
+
+func fullpage() []fullpagedata {
+	return []fullpagedata{
+		{
+			MainTitle:                "Main Information",
+			Title:                    "Title",
+			Description:              "Short description",
+			AuthorName:               "Author name",
+			TextAuthorphoto:          "Author Photo",
+			Authorphoto:              "../static/images/photo_icon.svg",
+			TextDate:                 "Publish Date",
+			ImageCamera:              "../static/images/photo_icon.svg",
+			Upload:                   "Upload",
+			TextImage:                "Hero Image",
+			PreviewArticle1:          "Article preview",
+			PreviewImage1:            "../static/images/aritcle_frame.png",
+			PreviewArticle2:          "Post card preview",
+			PreviewImage2:            "../static/images/post_card_frame.png",
+			TitleInPreview:           "New Post",
+			SubtitleInPreview:        "Please, enter any description",
+			PreviewImageChangeAuthor: "../static/images/blankLogo.png",
+			PreviewImageChange:       "../static/images/kek.jpg",
+			RandomName:               "Enter author name",
+			RandomDate:               "4/19/2023",
+			FooterTitle:              "Content",
+			FooterSubtitle:           "Post content (plain text)",
+			ImageMegaCamera:          "../static/images/camera.png",
+			ImageMegaTrash:           "../static/images/trash-2.png",
+		},
 	}
 }
 
@@ -544,97 +582,141 @@ func mainlogin() []mainlogindata {
 	}
 }
 
-func headeradmin() []headeradmindata {
-	return []headeradmindata{
-		{
-			Logo:      "../static/images/escape_author_white.svg",
-			Avatar:    "../static/images/avatar.png",
-			ImageExit: "/login",
-			Exit:      "../static/images/log-out.svg",
-		},
+type createPostRequest struct {
+	Title           string `json:"title_g"`
+	Description     string `json:"subtitle_g"`
+	AuthorName      string `json:"author_name_g"`
+	AuthorPhoto     string `json:"author_url_name"`
+	AuthorPhotoName string `json:"author_url_name_base64"`
+	Date            string `json:"date_g"`
+	BigImage        string `json:"big_image_name"`
+	BigImageName    string `json:"big_image_name_base64"`
+	SmallImage      string `json:"small_image_name"`
+	SmallImageName  string `json:"small_image_name_base64"`
+	ContentPost     string `json:"text_area_content_g"`
+}
+
+func createPost(db *sqlx.DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		reqData, err := io.ReadAll(r.Body)
+		if err != nil {
+			http.Error(w, "1Error", 500)
+			log.Println(err.Error())
+			return
+		}
+
+		var req createPostRequest
+
+		err = json.Unmarshal(reqData, &req)
+		if err != nil {
+			http.Error(w, "2Error", 500)
+			log.Println(err.Error())
+			return
+		}
+
+		b64Author := req.AuthorPhotoName[strings.IndexByte(req.AuthorPhotoName, ',')+1:]
+		authorImg, err := base64.StdEncoding.DecodeString(b64Author)
+		if err != nil {
+			http.Error(w, "img", 500)
+			log.Println(err.Error())
+			return
+		}
+
+		fileAuthor, err := os.Create("static/images/" + req.AuthorPhoto)
+		if err != nil {
+			http.Error(w, "file", 500)
+			fmt.Println(err.Error())
+			return
+		}
+
+		_, err = fileAuthor.Write(authorImg)
+		if err != nil {
+			http.Error(w, "write", 500)
+			log.Println(err.Error())
+			return
+		}
+
+		b64Big := req.BigImageName[strings.IndexByte(req.BigImageName, ',')+1:]
+		bigImg, err := base64.StdEncoding.DecodeString(b64Big)
+		if err != nil {
+			http.Error(w, "img", 500)
+			log.Println(err.Error())
+			return
+		}
+
+		fileBig, err := os.Create("static/images/" + req.BigImage)
+		if err != nil {
+			http.Error(w, "file", 500)
+			log.Println(err.Error())
+			return
+		}
+
+		_, err = fileBig.Write(bigImg)
+		if err != nil {
+			http.Error(w, "write", 500)
+			log.Println(err.Error())
+			return
+		}
+
+		b64Small := req.SmallImageName[strings.IndexByte(req.SmallImageName, ',')+1:]
+		smallImg, err := base64.StdEncoding.DecodeString(b64Small)
+		if err != nil {
+			http.Error(w, "img", 500)
+			log.Println(err.Error())
+			return
+		}
+
+		fileSmall, err := os.Create("static/images/" + req.SmallImage)
+		if err != nil {
+			http.Error(w, "file", 500)
+			log.Println(err.Error())
+			return
+		}
+
+		_, err = fileSmall.Write(smallImg)
+		if err != nil {
+			http.Error(w, "write", 500)
+			log.Println(err.Error())
+			return
+		}
+
+		err = saveOrder(db, req)
+		if err != nil {
+			http.Error(w, "bd", 500)
+			log.Println(err.Error())
+			return
+		}
+		return
 	}
 }
 
-func maintop() []maintopdata {
-	return []maintopdata{
-		{
-			Title:    "New Post",
-			Subtitle: "Fill out the form bellow and publish your article",
-			Button:   "Publish",
-		},
-	}
-}
+func saveOrder(db *sqlx.DB, req createPostRequest) error {
+	const query = `
+		INSERT INTO
+			post
+		(
+			title,
+			subtitle,
+			author,
+			author_url,
+			publish_date,
+			image_url,
+			content,
+			featured
+		)
+		VALUES
+		(
+			?,
+			?,
+			?,
+			CONCAT('../static/images/', ?),
+			?,
+			CONCAT('../static/images/', ?),
+			?,
+			?
+		)
+	`
 
-func maininfo() []maininfodata {
-	return []maininfodata{
-		{
-			Title:   "Main Information",
-			Fields:  fields(),
-			Preview: preview(),
-		},
-	}
-}
-
-func fields() []fieldsdata {
-	return []fieldsdata{
-		{
-			Title:          "Title",
-			SubTitle:       "Short description",
-			AuthorName:     "Author Name",
-			TitlAuthorUrl:  "Author Photo",
-			AuthorPhoto:    "../static/images/photo_icon.svg",
-			Upload:         "Upload",
-			Date:           "Publish Date",
-			TitleImage:     "Hero image",
-			HeroBigImage:   "../static/images/hero_image_big.png",
-			HeroSmallImage: "../static/images/hero_image_small.png",
-			BigNote:        "Size up to 10mb. Format: png, jpeg, gif.",
-			SmallNote:      "Size up to 5mb. Format: png, jpeg, gif.",
-		},
-	}
-}
-
-func preview() []previewdata {
-	return []previewdata{
-		{
-			Article:  article(),
-			PostCard: postcard(),
-		},
-	}
-}
-
-func article() []articledata {
-	return []articledata{
-		{
-			Label:    "Article preview",
-			FrameURL: "../static/images/aritcle_frame.png",
-			Title:    "New Post",
-			Subtitle: "Please, enter any description",
-			Imageurl: "../static/images/image_not_selected.png",
-		},
-	}
-}
-
-func postcard() []postcarddata {
-	return []postcarddata{
-		{
-			Label:          "Post card preview",
-			FrameURL:       "../static/images/post_card_frame.png",
-			Imageurl:       "../static/images/image_not_selected.png",
-			Title:          "New Post",
-			Subtitle:       "Please, enter any description",
-			AuthorPhotoURL: "../static/images/photo_icon.svg",
-			AuthorName:     "Enter author name",
-			Data:           "4/19/2023",
-		},
-	}
-}
-
-func content() []contentdata {
-	return []contentdata{
-		{
-			Title:   "Content",
-			Comment: "Post content (plain text)",
-		},
-	}
+	_, err := db.Exec(query, req.Title, req.Description, req.AuthorName, req.AuthorPhoto, req.Date, req.SmallImage, req.ContentPost, 0)
+	return err
 }
